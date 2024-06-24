@@ -24,6 +24,21 @@ git clone https://github.com/yourusername/social-media-app.git
 cd social-media-app
 ```
 ### Backend Setup
+
 ```bash
 cd backend
+npm install
+```
+### Create a .env file
+
+Create a .env file in the backend directory and add the following environment variables:
+```bash
+MONGODB_URI=mongodb://localhost:27017/bee
+JWT_SECRET=your_jwt_secret
+PORT=3000
+```
+
+### Start the backend server
+```bash
+npm run server
 ```
