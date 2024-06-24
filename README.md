@@ -23,3 +23,7 @@ This is a simple social media application built with a Node.js backend using Exp
 git clone https://github.com/yourusername/social-media-app.git
 cd social-media-app
 ```
+### Backend Setup
+```bash
+cd backend
+```
