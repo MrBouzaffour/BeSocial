@@ -20,8 +20,8 @@ This is a simple social media application built with a Node.js backend using Exp
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/social-media-app.git
-cd social-media-app
+git clone https://github.com/yourusername/Bee.git
+cd Bee
 ```
 ### Backend Setup
 
