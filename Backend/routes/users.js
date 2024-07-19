@@ -4,7 +4,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/auth');  // Import the auth middleware
 require('dotenv').config();
 
 // Register a user
@@ -16,16 +16,20 @@ router.post(
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
   ],
   async (req, res) => {
+    console.log('Register endpoint hit'); // Log to indicate endpoint hit
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { name, email, password } = req.body;
+    console.log('Received data:', { name, email, password }); // Log received data
 
     try {
       let user = await User.findOne({ email });
       if (user) {
+        console.log('User already exists');
         return res.status(400).json({ msg: 'User already exists' });
       }
 
@@ -39,6 +43,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
+      console.log('User saved to database'); // Log user save
 
       const payload = {
         user: {
@@ -56,7 +61,7 @@ router.post(
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error:', err.message);
       res.status(500).send('Server error');
     }
   }
@@ -70,21 +75,26 @@ router.post(
     check('password', 'Password is required').exists()
   ],
   async (req, res) => {
+    console.log('Login endpoint hit'); // Log to indicate endpoint hit
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { email, password } = req.body;
+    console.log('Received data:', { email, password }); // Log received data
 
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        console.log('Invalid Credentials');
         return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
+        console.log('Invalid Credentials');
         return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
@@ -104,7 +114,7 @@ router.post(
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error:', err.message);
       res.status(500).send('Server error');
     }
   }
@@ -116,7 +126,7 @@ router.get('/', auth, async (req, res) => {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
-    console.error(err.message);
+    console.error('Server error:', err.message);
     res.status(500).send('Server error');
   }
 });
