@@ -12,6 +12,7 @@ router.post(
   '/register',
   [
     check('name', 'Name is required').not().isEmpty(),
+    check('lastname', 'LastName is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
   ],
@@ -23,8 +24,8 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
-    console.log('Received data:', { name, email, password }); // Log received data
+    const { name,lastname, email, password } = req.body;
+    console.log('Received data:', { name,lastname, email, password }); // Log received data
 
     try {
       let user = await User.findOne({ email });
@@ -34,6 +35,7 @@ router.post(
       }
 
       user = new User({
+        lastname,
         name,
         email,
         password
@@ -43,7 +45,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
-      console.log('User saved to database'); // Log user save
+      console.log('User saved to database'); 
 
       const payload = {
         user: {
