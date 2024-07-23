@@ -1,11 +1,13 @@
 <template>
-  <div class="auth-container">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+  <div class="auth-page">
+    <div class="auth-container">
+      <h2>Login</h2>
+      <form @submit.prevent="login">
+        <input v-model="email" type="email" placeholder="Email" required />
+        <input v-model="password" type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -53,9 +55,19 @@ export default {
 </script>
 
 <style scoped>
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the start of the flex container */
+  height: 100vh;
+  margin: 0;
+  background-color: #f9f9f9;
+  padding-top: 5vh; /* Add padding at the top to push the content up */
+}
+
 .auth-container {
   max-width: 400px;
-  margin: 50px auto;
+  width: 100%;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -65,6 +77,8 @@ export default {
 
 .auth-container h2 {
   margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
 }
 
 .auth-container input {
@@ -72,6 +86,8 @@ export default {
   padding: 10px;
   margin-bottom: 10px;
   font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .auth-container button {
@@ -81,6 +97,8 @@ export default {
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 .auth-container button:hover {
