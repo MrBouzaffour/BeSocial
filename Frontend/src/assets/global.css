@@ -1,96 +1,109 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    overflow: hidden; /* Prevent scrolling */
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #8ecae6; /* Soft blue */
-    color: #023047; /* Dark blue for contrast */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffda77; /* Warm honey color */
+  color: #5a3e36; /* Soft brown for contrast */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; /* Ensure position context for navbar links */
+}
+
+.navbar-brand a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #5a3e36; /* Soft brown text */
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #ffda77; /* Warm honey background */
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-brand a:hover {
+  background-color: #f6c564; /* Slightly darker honey for hover effect */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+.navbar-links a,
+.navbar-links button {
+  color: #5a3e36; /* Soft brown text */
+  text-decoration: none;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.navbar-links a:hover,
+.navbar-links button:hover {
+  background-color: #f6c564;
+  color: #5a3e36;
+  border-radius: 5px;
+}
+
+.navbar-toggle {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #5a3e36;
+}
+
+.footer {
+  background-color: #ffda77; /* Same honey color as navbar */
+  color: #5a3e36; /* Soft brown for contrast */
+  padding: 10px 20px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  flex: 0 0 auto; /* Prevents flex-grow and flex-shrink */
+}
+
+.footer p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
   .navbar-links {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #ffda77; /* Warm honey color */
+    text-align: center;
   }
-  
+
   .navbar-links a,
   .navbar-links button {
-    color: #023047;
-    text-decoration: none;
-    padding: 8px 12px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 1rem;
+    padding: 15px;
+    font-size: 1.2rem;
   }
-  
-  .navbar-links a:hover,
-  .navbar-links button:hover {
-    background-color: #219ebc;
-    color: #fff;
-    border-radius: 5px;
+
+  .navbar-links-open {
+    display: flex;
   }
-  
+
   .navbar-toggle {
-    display: none;
-    cursor: pointer;
-    font-size: 1.5rem;
+    display: block;
   }
-  
-  .footer {
-    background-color: #8ecae6; /* Same soft blue as hero */
-    color: #023047; /* Same dark blue for contrast */
-    padding: 10px 20px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    flex: 0 0 auto; /* Prevents flex-grow and flex-shrink */
-  }
-  
-  .footer p {
-    margin: 0;
-    font-size: 1rem;
-  }
-  
-  /* Responsive styling */
-  @media (max-width: 768px) {
-    .navbar-links {
-      display: none;
-      flex-direction: column;
-      width: 100%;
-      position: absolute;
-      top: 60px;
-      left: 0;
-      background-color: #8ecae6; /* Soft blue */
-      text-align: center;
-    }
-  
-    .navbar-links a,
-    .navbar-links button {
-      padding: 15px;
-      font-size: 1.2rem;
-    }
-  
-    .navbar-links-open {
-      display: flex;
-    }
-  
-    .navbar-toggle {
-      display: block;
-    }
-  }
-  
+}
