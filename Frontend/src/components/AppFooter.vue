@@ -1,7 +1,7 @@
 <template>
-  <footer class="footer">
-    <p>&copy; 2024 MyApp. All rights reserved.</p>
-  </footer>
+  <div class="footer">
+    <p>&copy; 2024 BeeSocial. All rights reserved.</p>
+  </div>
 </template>
 
 <script>
@@ -12,8 +12,8 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: #8ecae6; /* Same soft blue as hero */
-  color: #023047; /* Same dark blue for contrast */
+  background-color: #f2f2f2; /* Same light grey as hero */
+  color: #333; /* Same dark grey for contrast */
   padding: 10px 20px;
   width: 100%;
   text-align: center;
