@@ -1,13 +1,22 @@
 <template>
   <div class="auth-page">
     <div class="auth-container">
-      <h2>Register</h2>
+      <div class="auth-header">
+        <h2>Join the Hive</h2>
+      </div>
       <form @submit.prevent="register">
-        <input v-model="name" type="text" placeholder="Name" required />
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Password" required />
-        <button type="submit">Register</button>
+        <div class="form-group">
+          <input v-model="name" type="text" placeholder="Name" required />
+        </div>
+        <div class="form-group">
+          <input v-model="email" type="email" placeholder="Email" required />
+        </div>
+        <div class="form-group">
+          <input v-model="password" type="password" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn">Join the Hive</button>
       </form>
+      <p class="switch-auth">Already a member? <router-link to="/login">Buzz In</router-link></p>
     </div>
   </div>
 </template>
@@ -36,7 +45,7 @@ export default {
         const data = await response.json();
         if (data.token) {
           localStorage.setItem('token', data.token);
-          alert('Registered successfully');
+          alert('Welcome to the Hive!');
           router.push('/feed');
         } else {
           alert(data.msg || 'Registration failed');
@@ -60,11 +69,10 @@ export default {
 .auth-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align items to the start of the flex container */
+  align-items: center;
   height: 100vh;
   margin: 0;
-  background-color: #f9f9f9;
-  padding-top: 5vh; /* Add padding at the top to push the content up */
+  background: #fff3b0; /* Soft yellow background */
 }
 
 .auth-container {
@@ -75,35 +83,63 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   text-align: center;
+  position: relative;
+}
+
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bee-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
 .auth-container h2 {
-  margin-bottom: 20px;
   font-size: 24px;
-  color: #333;
+  color: #5a3e36;
+}
+
+.form-group {
+  margin-bottom: 15px;
 }
 
 .auth-container input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-.auth-container button {
+.btn {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #ffda77;
+  color: #5a3e36;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.auth-container button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background-color: #f6c564;
+}
+
+.switch-auth {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.switch-auth a {
+  color: #5a3e36;
+  text-decoration: none;
+  font-weight: bold;
 }
 </style>
