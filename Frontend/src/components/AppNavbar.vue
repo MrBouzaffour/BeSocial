@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
-      <router-link to="/">MyApp</router-link>
+      <router-link to="/">Bee</router-link>
     </div>
     <div class="navbar-toggle" @click="toggleMenu">
       <span v-if="!menuOpen">☰</span>
@@ -38,5 +38,5 @@ export default {
 </script>
 
 <style scoped>
-/* Navbar styles are in global.css */
+/* Additional scoped styles if needed */
 </style>
