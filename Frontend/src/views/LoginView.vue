@@ -1,63 +1,44 @@
 <template>
   <div class="auth-page">
     <div class="auth-container">
-      <div class="auth-header">
-        <img src="@/assets/bee-logo.png" alt="Bee Logo" class="bee-logo">
-        <h2>Buzz In</h2>
-      </div>
+      <h2>Buzz In</h2>
       <form @submit.prevent="login">
-        <div class="form-group">
-          <input v-model="email" type="email" placeholder="Email" required />
-        </div>
-        <div class="form-group">
-          <input v-model="password" type="password" placeholder="Password" required />
-        </div>
-        <button type="submit" class="btn">Buzz In</button>
+        <input v-model="email" type="email" placeholder="Email" required />
+        <input v-model="password" type="password" placeholder="Password" required />
+        <button type="submit">Buzz In</button>
       </form>
-      <p class="switch-auth">New to the Hive? <router-link to="/register">Join the Hive</router-link></p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import axios from '../utils/axios'; // Import the configured Axios instance
+import { mapActions } from 'vuex';
 
 export default {
   name: 'LoginView',
-  setup() {
-    const email = ref('');
-    const password = ref('');
-    const router = useRouter();
-    const store = useStore();
-
-    const login = async () => {
-      try {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email: email.value, password: password.value }),
-        });
-        const data = await response.json();
-        if (data.token) {
-          store.dispatch('login', data.token);
-          router.push('/feed');
-        } else {
-          alert(data.msg || 'Login failed');
-        }
-      } catch (error) {
-        console.error('Error logging in:', error);
-      }
-    };
-
+  data() {
     return {
-      email,
-      password,
-      login,
+      email: '',
+      password: '',
     };
+  },
+  methods: {
+    ...mapActions(['login']),
+    async login() {
+      try {
+        const response = await axios.post('/api/auth/login', {
+          email: this.email,
+          password: this.password
+        });
+        console.log('Login response:', response.data);
+        const token = response.data.token;
+        await this.login(token);
+        this.$router.push('/feed');
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
+    },
   },
 };
 </script>
@@ -68,8 +49,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
-  background: #f2f2f2; /* Light grey */
+  background-color: #f9f9f9;
 }
 
 .auth-container {
@@ -82,55 +62,33 @@ export default {
   text-align: center;
 }
 
-.auth-header {
+.auth-container h2 {
   margin-bottom: 20px;
-}
-
-.auth-header .bee-logo {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
-}
-
-.auth-header h2 {
   font-size: 24px;
-  color: #5a3e36; /* Dark brown */
-}
-
-.form-group {
-  margin-bottom: 15px;
+  color: #5a3e36;
 }
 
 .auth-container input {
   width: 100%;
   padding: 10px;
+  margin-bottom: 10px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-.auth-container button.btn {
+.auth-container button {
   width: 100%;
   padding: 10px;
-  background-color: #8bc34a; /* Light green */
-  color: #fff;
+  background-color: #ffda77;
+  color: #5a3e36;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
 }
 
-.auth-container button.btn:hover {
-  background-color: #7cb342; /* Slightly darker green */
-}
-
-.switch-auth {
-  margin-top: 20px;
-  color: #555;
-}
-
-.switch-auth a {
-  color: #8bc34a; /* Light green */
-  text-decoration: none;
+.auth-container button:hover {
+  background-color: #f6c564;
 }
 </style>

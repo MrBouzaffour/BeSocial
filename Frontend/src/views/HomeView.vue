@@ -1,8 +1,7 @@
 <template>
   <div id="welcome">
     <div class="hero">
-      <img src="@/assets/bee-logo.png" alt="Bee Logo" class="bee-logo">
-      <h1>Welcome to BeeSocial</h1>
+      <h1>Welcome to Bee</h1>
       <p>Your new favorite social media platform for students and professionals!</p>
       <div class="cta-buttons">
         <router-link to="/register" class="btn primary">Join the Hive</router-link>
@@ -13,6 +12,7 @@
   </div>
 </template>
 
+
 <script>
 import AppFooter from '../components/AppFooter.vue';
 
@@ -21,14 +21,6 @@ export default {
   components: {
     AppFooter,
   },
-  mounted() {
-    // Hide navbar when on the home page
-    document.querySelector('.navbar').style.display = 'none';
-  },
-  beforeUnmount() {
-    // Show navbar when leaving the home page
-    document.querySelector('.navbar').style.display = 'flex';
-  }
 };
 </script>
 

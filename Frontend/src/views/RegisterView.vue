@@ -10,6 +10,9 @@
           <input v-model="name" type="text" placeholder="Name" required />
         </div>
         <div class="form-group">
+          <input v-model="lastname" type="text" placeholder="LastName" required />
+        </div>
+        <div class="form-group">
           <input v-model="email" type="email" placeholder="Email" required />
         </div>
         <div class="form-group">
@@ -30,6 +33,7 @@ export default {
   name: 'RegisterView',
   setup() {
     const name = ref('');
+    const lastname = ref('');
     const email = ref('');
     const password = ref('');
     const router = useRouter();
@@ -41,7 +45,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: name.value, email: email.value, password: password.value }),
+          body: JSON.stringify({ name: name.value,lastname: lastname.value, email: email.value, password: password.value }),
         });
         const data = await response.json();
         if (data.token) {
@@ -57,6 +61,7 @@ export default {
     return {
       name,
       email,
+      lastname,
       password,
       register,
     };

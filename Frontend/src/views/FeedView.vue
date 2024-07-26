@@ -1,135 +1,114 @@
 <template>
-  <div class="feed">
-    <aside class="sidebar left">
-      <div class="option">
-        <router-link to="/calendar">Calendar</router-link>
-      </div>
-      <div class="option">
-        <router-link to="/todolist">To-Do List</router-link>
-      </div>
-      <div class="option">
-        <router-link to="/games">Games</router-link>
-      </div>
-    </aside>
-    <main class="main-content">
-      <div class="post-box">
-        <textarea v-model="postContent" placeholder="What's on your mind?"></textarea>
-        <button @click="createPost">Post</button>
-      </div>
-      <div class="posts">
-        <div class="post" v-for="post in posts" :key="post.id">
-          <p>{{ post.content }}</p>
-        </div>
-      </div>
-    </main>
-    <aside class="sidebar right">
-      <div class="chat">
-        <h2>Chat</h2>
-        <!-- Chat UI goes here -->
-      </div>
-    </aside>
+  <div class="feed-page">
+    <div class="sidebar">
+      <ul class="nav-list">
+        <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">Feed</li>
+        <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">Chat</li>
+        <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">To-Do List</li>
+        <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">Study Tools</li>
+        <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">Financial Help</li>
+        <li @click="logout">Logout</li>
+      </ul>
+    </div>
+    <div class="main-content">
+      <component :is="activeComponent"></component>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { mapGetters, mapActions } from 'vuex';
+import UserFeed from '../components/UserFeed.vue';
+import UserChat from '../components/UserChat.vue';
+import UserToDoList from '../components/UserToDoList.vue';
+import UserStudyTools from '../components/UserStudyTools.vue';
+import UserFinancialHelp from '../components/UserFinancialHelp.vue';
 
 export default {
   name: 'FeedView',
-  setup() {
-    const postContent = ref('');
-    const posts = ref([]);
-
-    const createPost = async () => {
-      // Implement the logic to create a post
-      const newPost = {
-        id: Date.now(),
-        content: postContent.value,
-      };
-      posts.value.push(newPost);
-      postContent.value = '';
-    };
-
-    onMounted(async () => {
-      // Fetch initial posts
-      posts.value = await fetchPosts();
-    });
-
-    const fetchPosts = async () => {
-      // Implement the logic to fetch posts
-      return [
-        { id: 1, content: 'This is a post' },
-        { id: 2, content: 'This is another post' },
-      ];
-    };
-
+  data() {
     return {
-      postContent,
-      posts,
-      createPost,
+      activeTab: 'feed',
     };
+  },
+  components: {
+    UserFeed,
+    UserChat,
+    UserToDoList,
+    UserStudyTools,
+    UserFinancialHelp,
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated']),
+    activeComponent() {
+      return {
+        feed: UserFeed,
+        chat: UserChat,
+        todo: UserToDoList,
+        study: UserStudyTools,
+        finance: UserFinancialHelp,
+      }[this.activeTab];
+    },
+  },
+  methods: {
+    ...mapActions(['logout']),
+    setActiveTab(tab) {
+      this.activeTab = tab;
+    },
+  },
+  beforeCreate() {
+    if (!this.isAuthenticated) {
+      this.$router.push('/login');
+    }
   },
 };
 </script>
 
 <style scoped>
-.feed {
+.feed-page {
   display: flex;
   height: 100vh;
+  background-color: #f2f2f2;
+  font-family: 'Arial', sans-serif;
 }
 
 .sidebar {
   width: 20%;
-  background-color: #f0f7f9;
+  background-color: #ffeb99; /* Honey-like background color */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-right: 2px solid #ffcc66; /* Darker honey border */
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.nav-list li {
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #ffcc66; /* Darker honey color */
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-list li.active,
+.nav-list li:hover {
+  background-color: #e6b347; /* Even darker honey color for active and hover */
 }
 
 .main-content {
-  width: 60%;
+  width: 80%;
   padding: 20px;
-  background-color: #fff;
-}
-
-.post-box {
-  margin-bottom: 20px;
-}
-
-.post-box textarea {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.post-box button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.post-box button:hover {
-  background-color: #0056b3;
-}
-
-.posts {
-  display: flex;
-  flex-direction: column;
-}
-
-.post {
-  background-color: #f9f9f9;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.right .chat {
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  overflow-y: auto;
 }
 </style>

@@ -1,21 +1,20 @@
 <template>
   <div id="app">
-    <AppNavbar />
     <router-view />
   </div>
 </template>
 
 <script>
-import AppNavbar from './components/AppNavbar.vue';
-
 export default {
   name: 'App',
-  components: {
-    AppNavbar,
-  },
 };
 </script>
 
-<style scoped>
-/* No need for navbar styles here as they are in global.css */
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
 </style>

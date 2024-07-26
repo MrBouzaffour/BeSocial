@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'users'
   },
   text: {
     type: String,
@@ -17,7 +17,7 @@ const PostSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
       }
     }
   ],
@@ -25,11 +25,14 @@ const PostSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
       },
       text: {
         type: String,
         required: true
+      },
+      name: {
+        type: String
       },
       date: {
         type: Date,
@@ -43,4 +46,4 @@ const PostSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('post', PostSchema);
