@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import axios from '../utils/axios'; // Import the configured Axios instance
+import axios from '../utils/axios'; // Ensure this path is correct
 import { mapActions } from 'vuex';
 
 export default {
@@ -31,7 +31,6 @@ export default {
           email: this.email,
           password: this.password
         });
-        console.log('Login response:', response.data);
         const token = response.data.token;
         await this.login(token);
         this.$router.push('/feed');
@@ -41,6 +40,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style scoped>

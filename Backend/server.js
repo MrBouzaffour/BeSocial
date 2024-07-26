@@ -12,12 +12,12 @@ const db_url = config.get('mongoURI');
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(db_url)
+mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
 // Routes
-app.use('/api/auth', require('./routes/users')); // Update to match the actual file name
+app.use('/api/auth', require('./routes/users'));
 app.use('/api/posts', require('./routes/posts'));
 
 // Serve static files from the frontend build directory

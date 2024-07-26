@@ -1,8 +1,7 @@
 import axios from 'axios';
-import store from '../store'; // Ensure the store is imported correctly
+import store from '../store';
 
-// Set up the base URL for your API
-axios.defaults.baseURL = 'http://your-api-url'; // Replace with your API URL
+axios.defaults.baseURL = 'http://localhost:3000'; // Adjust this URL as needed
 
 // Intercept requests to add the auth token if available
 axios.interceptors.request.use(config => {
@@ -19,7 +18,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   return response;
 }, error => {
-  if (error.response.status === 401) {
+  if (error.response && error.response.status === 401) {
     // Handle unauthorized access
     store.dispatch('logout');
   }
