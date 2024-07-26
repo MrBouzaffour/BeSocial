@@ -12,12 +12,12 @@ const db_url = config.get('mongoURI');
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db_url)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
 // Routes
-app.use('/api/auth', require('./routes/users'));
+app.use('/api/auth', require('./routes/users')); // Ensure this matches your routes file
 app.use('/api/posts', require('./routes/posts'));
 
 // Serve static files from the frontend build directory
@@ -29,3 +29,4 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  

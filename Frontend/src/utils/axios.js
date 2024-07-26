@@ -1,7 +1,8 @@
 import axios from 'axios';
-import store from '../store';
+import store from '../store'; // Import the store
 
-axios.defaults.baseURL = 'http://localhost:3000'; // Adjust this URL as needed
+// Set up the base URL for your API
+axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 
 // Intercept requests to add the auth token if available
 axios.interceptors.request.use(config => {
@@ -18,7 +19,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   return response;
 }, error => {
-  if (error.response && error.response.status === 401) {
+  if (error.response.status === 401) {
     // Handle unauthorized access
     store.dispatch('logout');
   }

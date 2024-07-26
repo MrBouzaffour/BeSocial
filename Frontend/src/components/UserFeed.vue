@@ -1,25 +1,30 @@
 <template>
   <div>
     <UserPostForm />
-    <div v-for="post in posts" :key="post._id" class="post">
-      <div class="post-header">
-        <h3>{{ post.name }}</h3>
-      </div>
-      <p class="post-text">{{ post.text }}</p>
-      <div class="post-actions">
-        <button @click="likePost(post._id)">Like ({{ post.likes.length }})</button>
-        <button @click="toggleComments(post._id)">Comments ({{ post.comments.length }})</button>
-      </div>
-      <div v-if="showComments[post._id]" class="comments">
-        <div v-for="comment in post.comments" :key="comment._id" class="comment">
-          <h4>{{ comment.name }}</h4>
-          <p>{{ comment.text }}</p>
+    <div v-if="posts.length > 0">
+      <div v-for="post in posts" :key="post._id" class="post">
+        <div class="post-header">
+          <h3>{{ post.name }}</h3>
         </div>
-        <form @submit.prevent="addComment(post._id)">
-          <input v-model="commentText[post._id]" placeholder="Add a comment" />
-          <button type="submit">Submit</button>
-        </form>
+        <p class="post-text">{{ post.text }}</p>
+        <div class="post-actions">
+          <button @click="likePost(post._id)">Like ({{ post.likes.length }})</button>
+          <button @click="toggleComments(post._id)">Comments ({{ post.comments.length }})</button>
+        </div>
+        <div v-if="showComments[post._id]" class="comments">
+          <div v-for="comment in post.comments" :key="comment._id" class="comment">
+            <h4>{{ comment.name }}</h4>
+            <p>{{ comment.text }}</p>
+          </div>
+          <form @submit.prevent="addComment(post._id)">
+            <input v-model="commentText[post._id]" placeholder="Add a comment" />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       </div>
+    </div>
+    <div v-else>
+      <p>No posts available</p>
     </div>
   </div>
 </template>
@@ -49,7 +54,7 @@ export default {
   computed: {
     ...mapGetters(['allPosts']),
     posts() {
-      return this.allPosts;
+      return this.allPosts || [];
     }
   },
   methods: {
