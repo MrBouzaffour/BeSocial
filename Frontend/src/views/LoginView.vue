@@ -2,6 +2,7 @@
   <div class="auth-page">
     <div class="auth-container">
       <div class="auth-header">
+        <img src="@/assets/bee-logo.png" alt="Bee Logo" class="bee-logo">
         <h2>Buzz In</h2>
       </div>
       <form @submit.prevent="login">
@@ -68,7 +69,7 @@ export default {
   align-items: center;
   height: 100vh;
   margin: 0;
-  background: #fff3b0; /* Soft yellow background */
+  background: #f2f2f2; /* Light grey */
 }
 
 .auth-container {
@@ -79,25 +80,21 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   text-align: center;
-  position: relative;
 }
 
 .auth-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-bottom: 20px;
 }
 
-.bee-logo {
-  width: 80px;
-  height: 80px;
+.auth-header .bee-logo {
+  width: 50px;
+  height: 50px;
   margin-bottom: 10px;
 }
 
-.auth-container h2 {
+.auth-header h2 {
   font-size: 24px;
-  color: #5a3e36;
+  color: #5a3e36; /* Dark brown */
 }
 
 .form-group {
@@ -112,30 +109,28 @@ export default {
   border-radius: 5px;
 }
 
-.btn {
+.auth-container button.btn {
   width: 100%;
   padding: 10px;
-  background-color: #ffda77;
-  color: #5a3e36;
+  background-color: #8bc34a; /* Light green */
+  color: #fff;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
-  transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #f6c564;
+.auth-container button.btn:hover {
+  background-color: #7cb342; /* Slightly darker green */
 }
 
 .switch-auth {
-  margin-top: 15px;
-  font-size: 14px;
+  margin-top: 20px;
+  color: #555;
 }
 
 .switch-auth a {
-  color: #5a3e36;
+  color: #8bc34a; /* Light green */
   text-decoration: none;
-  font-weight: bold;
 }
 </style>
