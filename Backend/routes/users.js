@@ -4,7 +4,6 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-require('dotenv').config();
 
 // Register a user
 router.post(
@@ -42,12 +41,12 @@ router.post(
         res.json({ token });
       });
     } catch (err) {
-      console.error('Server error:', err.message);
+      console.error(err.message);
       res.status(500).send('Server error');
     }
   }
 );
-// Login a user
+
 router.post(
   '/login',
   [

@@ -1,4 +1,4 @@
-// src/router/index.js
+// This file sets up the Vue Router for navigating between different views in your Vue.js application.
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
@@ -36,7 +36,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(`Routing to: ${to.path}`); // Log routing path
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.isAuthenticated) {
       next({

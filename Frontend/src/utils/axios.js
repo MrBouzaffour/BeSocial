@@ -1,5 +1,7 @@
+// This file configures Axios to include the base URL and token in the headers.
+
 import axios from 'axios';
-import store from '../store'; // Import the store
+import store from '../store';
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
@@ -11,18 +13,16 @@ instance.interceptors.request.use(config => {
     config.headers['x-auth-token'] = token;
   }
   return config;
-}, error => {
-  return Promise.reject(error);
 });
 
-instance.interceptors.response.use(response => {
-  return response;
-}, error => {
-  if (error.response && error.response.status === 401) {
-    store.dispatch('logout');
-    window.location = '/login';
+instance.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      store.dispatch('logout');
+    }
+    return Promise.reject(error);
   }
-  return Promise.reject(error);
-});
+);
 
 export default instance;

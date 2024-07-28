@@ -1,12 +1,23 @@
+// src/views/FeedView.vue
 <template>
   <div class="feed-page">
     <div class="sidebar">
       <ul class="nav-list">
-        <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">Feed</li>
-        <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">Chat</li>
-        <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">To-Do List</li>
-        <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">Study Tools</li>
-        <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">Financial Help</li>
+        <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">
+          Feed
+        </li>
+        <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">
+          Chat
+        </li>
+        <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">
+          To-Do List
+        </li>
+        <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">
+          Study Tools
+        </li>
+        <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">
+          Financial Help
+        </li>
         <li @click="logout">Logout</li>
       </ul>
     </div>
@@ -17,18 +28,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import UserFeed from '../components/UserFeed.vue';
-import UserChat from '../components/UserChat.vue';
-import UserToDoList from '../components/UserToDoList.vue';
-import UserStudyTools from '../components/UserStudyTools.vue';
-import UserFinancialHelp from '../components/UserFinancialHelp.vue';
+import { mapGetters, mapActions } from "vuex";
+import UserFeed from "../components/UserFeed.vue";
+import UserChat from "../components/UserChat.vue";
+import UserToDoList from "../components/UserToDoList.vue";
+import UserStudyTools from "../components/UserStudyTools.vue";
+import UserFinancialHelp from "../components/UserFinancialHelp.vue";
+import store from '../store';
 
 export default {
-  name: 'FeedView',
+  props: {},
+  name: "FeedView",
   data() {
     return {
-      activeTab: 'feed',
+      activeTab: "feed",
     };
   },
   components: {
@@ -39,7 +52,7 @@ export default {
     UserFinancialHelp,
   },
   computed: {
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(["isAuthenticated"]),
     activeComponent() {
       return {
         feed: UserFeed,
@@ -51,16 +64,16 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(["logout"]),
     setActiveTab(tab) {
       this.activeTab = tab;
     },
   },
   beforeCreate() {
-    console.log('Checking authentication in FeedView'); // Debug: log authentication check
-    if (!this.isAuthenticated) {
-      console.log('Not authenticated, redirecting to login'); // Debug: log redirection
-      this.$router.push('/login');
+    console.log("Checking authentication in FeedView"); // Debug: log authentication check
+    if (!store.getters.isAuthenticated) {
+      console.log("Not authenticated, redirecting to login"); // Debug: log redirection
+      this.$router.push("/login");
     }
   },
 };
@@ -71,7 +84,7 @@ export default {
   display: flex;
   height: 100vh;
   background-color: #f2f2f2;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .sidebar {

@@ -1,8 +1,8 @@
-// src/store/index.js
+// This file sets up the Vuex store for managing state in your Vue.js application.
 import { createStore } from 'vuex';
 import axios from '../utils/axios'; // Import the configured Axios instance
 
-export default createStore({
+const store = createStore({
   state: {
     posts: [],
     user: null,
@@ -77,3 +77,5 @@ export default createStore({
   },
   modules: {},
 });
+
+export default store;
