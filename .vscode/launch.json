@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/ahmed/Desktop/Work/github/Bee/Frontend/src/assets",
-      "program": "c:/Users/ahmed/Desktop/Work/github/Bee/Frontend/src/assets/build/Debug/outDebug",
+      "cwd": "c:/Users/ahmed/Desktop/Work/github/1/Bee/Frontend/src/assets",
+      "program": "c:/Users/ahmed/Desktop/Work/github/1/Bee/Frontend/src/assets/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
