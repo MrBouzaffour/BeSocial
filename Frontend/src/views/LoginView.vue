@@ -14,6 +14,7 @@
 <script>
 import axios from '../utils/axios'; // Import the configured Axios instance
 import { mapActions } from 'vuex';
+import store from '../store';
 
 export default {
   name: 'LoginView',
@@ -27,16 +28,17 @@ export default {
     ...mapActions(['login']),
     async login() {
       try {
-        const response = await axios.post('/auth/login', {
+        const response = await axios.post('/users/login', {
           email: this.email,
-          password: this.password,
+          password: this.password
         });
         const token = response.data.token;
-        console.log('Token received:', token); // Debug: log the received token
-        await this.$store.dispatch('login', token); // Dispatch Vuex login action
-        this.$router.push('/feed'); // Redirect to feed page
+        console.log('Token received:', token); // Debug: log token received
+        await store.dispatch('login', token);
+        console.log('User after login:', this.$store.state.user); // Debug: log user state
+        this.$router.push('/feed');
       } catch (error) {
-        console.error('Login failed:', error); // Debug: log any errors
+        console.error('Login failed:', error);
       }
     },
   },

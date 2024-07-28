@@ -2,70 +2,58 @@
   <div class="auth-page">
     <div class="auth-container">
       <div class="auth-header">
-        <img src="@/assets/bee-logo.png" alt="Bee Logo" class="bee-logo">
-        <h2>Join the Hive</h2>
+        <h2>Register</h2>
       </div>
       <form @submit.prevent="register">
         <div class="form-group">
-          <input v-model="name" type="text" placeholder="Name" required />
+          <input v-model="name" placeholder="Name" required />
         </div>
         <div class="form-group">
-          <input v-model="lastname" type="text" placeholder="LastName" required />
+          <input v-model="lastname" placeholder="Last Name" required />
         </div>
         <div class="form-group">
-          <input v-model="email" type="email" placeholder="Email" required />
+          <input v-model="email" placeholder="Email" required type="email" />
         </div>
         <div class="form-group">
-          <input v-model="password" type="password" placeholder="Password" required />
+          <input v-model="password" placeholder="Password" required type="password" />
         </div>
-        <button type="submit" class="btn">Join the Hive</button>
+        <button class="btn" type="submit">Register</button>
       </form>
-      <p class="switch-auth">Already a member? <router-link to="/login">Buzz In</router-link></p>
+      <div class="switch-auth">
+        Already have an account? <router-link to="/login">Login here</router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import axios from '../utils/axios'; // Make sure the axios instance is correctly configured
 
 export default {
-  name: 'RegisterView',
-  setup() {
-    const name = ref('');
-    const lastname = ref('');
-    const email = ref('');
-    const password = ref('');
-    const router = useRouter();
-
-    const register = async () => {
-      try {
-        const response = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: name.value,lastname: lastname.value, email: email.value, password: password.value }),
-        });
-        const data = await response.json();
-        if (data.token) {
-          router.push('/login');
-        } else {
-          alert(data.msg || 'Registration failed');
-        }
-      } catch (error) {
-        console.error('Error registering:', error);
-      }
-    };
-
+  data() {
     return {
-      name,
-      email,
-      lastname,
-      password,
-      register,
+      name: '',
+      lastname: '',
+      email: '',
+      password: ''
     };
   },
+  methods: {
+    async register() {
+      try {
+        const response = await axios.post('/users/register', {
+          name: this.name,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password
+        });
+        console.log('Registration successful:', response.data);
+        this.$router.push('/login');
+      } catch (error) {
+        console.error('Error registering:', error.response ? error.response.data : error.message);
+      }
+    }
+  }
 };
 </script>
 
@@ -91,12 +79,6 @@ export default {
 
 .auth-header {
   margin-bottom: 20px;
-}
-
-.auth-header .bee-logo {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
 }
 
 .auth-header h2 {

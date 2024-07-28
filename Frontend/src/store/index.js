@@ -1,5 +1,6 @@
+// src/store/index.js
 import { createStore } from 'vuex';
-import axios from '../utils/axios';
+import axios from '../utils/axios'; // Import the configured Axios instance
 
 export default createStore({
   state: {
@@ -26,31 +27,43 @@ export default createStore({
       }
     },
     SET_USER(state, user) {
+      console.log('User set:', user); // Debug: log user being set
       state.user = user;
     },
   },
   actions: {
     async fetchPosts({ commit }) {
-      const response = await axios.get('/api/posts');
+      const response = await axios.get('/posts');
+      console.log('Fetched posts:', response.data); // Log the fetched posts
       commit('SET_POSTS', response.data);
     },
     async addPost({ commit }, postData) {
-      const response = await axios.post('/api/posts', postData);
+      const response = await axios.post('/posts', postData);
+      console.log('Post added:', response.data); // Log the added post
       commit('ADD_POST', response.data);
     },
     async addLike({ commit }, postId) {
-      const response = await axios.put(`/api/posts/like/${postId}`);
+      const response = await axios.put(`/posts/like/${postId}`);
+      console.log('Post liked:', response.data); // Log the liked post
       commit('ADD_LIKE', { postId, likes: response.data });
     },
     async addComment({ commit }, { postId, text }) {
-      const response = await axios.post(`/api/posts/comment/${postId}`, { text });
+      const response = await axios.post(`/posts/comment/${postId}`, { text });
+      console.log('Comment added:', response.data); // Log the added comment
       commit('ADD_COMMENT', { postId, comments: response.data });
     },
     async login({ commit }, token) {
       localStorage.setItem('token', token);
       axios.defaults.headers.common['x-auth-token'] = token;
-      const response = await axios.get('/api/auth');
-      commit('SET_USER', response.data);
+
+      try {
+        const response = await axios.get('/auth');
+        console.log('User data received:', response.data); // Debug: log user data received
+        commit('SET_USER', response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error); // Debug: log any errors
+        commit('SET_USER', null);
+      }
     },
     async logout({ commit }) {
       localStorage.removeItem('token');

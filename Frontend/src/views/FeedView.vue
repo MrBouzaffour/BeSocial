@@ -57,7 +57,9 @@ export default {
     },
   },
   beforeCreate() {
+    console.log('Checking authentication in FeedView'); // Debug: log authentication check
     if (!this.isAuthenticated) {
+      console.log('Not authenticated, redirecting to login'); // Debug: log redirection
       this.$router.push('/login');
     }
   },

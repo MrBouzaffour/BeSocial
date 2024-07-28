@@ -1,11 +1,11 @@
 import axios from 'axios';
 import store from '../store'; // Import the store
 
-// Set up the base URL for your API
-axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+const instance = axios.create({
+  baseURL: process.env.VUE_APP_API_BASE_URL,
+});
 
-// Intercept requests to add the auth token if available
-axios.interceptors.request.use(config => {
+instance.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers['x-auth-token'] = token;
@@ -15,15 +15,14 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-// Intercept responses to handle errors globally
-axios.interceptors.response.use(response => {
+instance.interceptors.response.use(response => {
   return response;
 }, error => {
-  if (error.response.status === 401) {
-    // Handle unauthorized access
+  if (error.response && error.response.status === 401) {
     store.dispatch('logout');
+    window.location = '/login';
   }
   return Promise.reject(error);
 });
 
-export default axios;
+export default instance;

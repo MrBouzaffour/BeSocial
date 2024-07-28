@@ -1,3 +1,4 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
@@ -30,11 +31,12 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.VUE_APP_BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(`Routing to: ${to.path}`); // Log routing path
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.isAuthenticated) {
       next({

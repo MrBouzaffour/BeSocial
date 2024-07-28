@@ -2,22 +2,23 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
-const config = require('config');
+require('dotenv').config();
 
 const app = express();
-const PORT = config.get('port') || 3000;
-const db_url = config.get('mongoURI');
+const PORT = process.env.PORT || 3000;
+const db_url = process.env.MONGO_URI;
 
 // Middleware
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(db_url)
+mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.log('MongoDB connection error:', err));
 
 // Routes
-app.use('/api/auth', require('./routes/users')); // Ensure this matches your routes file
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
 app.use('/api/posts', require('./routes/posts'));
 
 // Serve static files from the frontend build directory
@@ -29,4 +30,3 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  
