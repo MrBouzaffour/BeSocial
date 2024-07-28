@@ -7,6 +7,10 @@
         <input v-model="password" type="password" placeholder="Password" required />
         <button type="submit">Buzz In</button>
       </form>
+      <p v-if="message" class="error-message">{{ message }}</p>
+      <p class="switch-auth">
+        Don't have an account? <router-link to="/register">Sign Up</router-link>
+      </p>
     </div>
   </div>
 </template>
@@ -22,6 +26,8 @@ export default {
     return {
       email: '',
       password: '',
+      message: ''
+
     };
   },
   methods: {
@@ -39,6 +45,8 @@ export default {
         this.$router.push('/feed');
       } catch (error) {
         console.error('Login failed:', error);
+        this.message = 'Invalid email or password. Please try again.'; 
+
       }
     },
   },
@@ -71,16 +79,17 @@ export default {
 }
 
 .auth-container input {
-  width: 100%;
+  width: calc(100% - 20px);
   padding: 10px;
   margin-bottom: 10px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .auth-container button {
-  width: 100%;
+  width: calc(100% - 20px);
   padding: 10px;
   background-color: #ffda77;
   color: #5a3e36;
@@ -88,9 +97,25 @@ export default {
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 .auth-container button:hover {
   background-color: #f6c564;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.switch-auth {
+  margin-top: 20px;
+  color: #555;
+}
+
+.switch-auth a {
+  color: #ffda77;
+  text-decoration: none;
 }
 </style>
