@@ -24,6 +24,12 @@ BeeSocial is a social media platform designed for students and professionals to 
 
 You can see a live demo of BeeSocial [here](#).
 
+# Prerequisites
+
+- Node.js
+- npm (Node Package Manager)
+- MongoDB
+  
 ## Installation
 
 Follow these steps to set up the project on your local machine:
