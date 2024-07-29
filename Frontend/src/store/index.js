@@ -1,11 +1,12 @@
 import { createStore } from 'vuex';
-import axios from '../utils/axios'; // Import the configured Axios instance
+import axios from '../utils/axios';
 
 export default createStore({
   state: {
     posts: [],
     user: null,
-    searchResults: []
+    searchResults: [],
+    profileUser: null
   },
   mutations: {
     SET_POSTS(state, posts) {
@@ -27,32 +28,35 @@ export default createStore({
       }
     },
     SET_USER(state, user) {
-      console.log('User set:', user); // Debug: log user being set
+      console.log('User set:', user);
       state.user = user;
     },
     SET_SEARCH_RESULTS(state, results) {
       state.searchResults = results;
+    },
+    SET_PROFILE_USER(state, user) {
+      state.profileUser = user;
     }
   },
   actions: {
     async fetchPosts({ commit }) {
       const response = await axios.get('/posts');
-      console.log('Fetched posts:', response.data); // Log the fetched posts
+      console.log('Fetched posts:', response.data);
       commit('SET_POSTS', response.data);
     },
     async addPost({ commit }, postData) {
       const response = await axios.post('/posts', postData);
-      console.log('Post added:', response.data); // Log the added post
+      console.log('Post added:', response.data);
       commit('ADD_POST', response.data);
     },
     async addLike({ commit }, postId) {
       const response = await axios.put(`/posts/like/${postId}`);
-      console.log('Post liked:', response.data); // Log the liked post
+      console.log('Post liked:', response.data);
       commit('ADD_LIKE', { postId, likes: response.data });
     },
     async addComment({ commit }, { postId, text }) {
       const response = await axios.post(`/posts/comment/${postId}`, { text });
-      console.log('Comment added:', response.data); // Log the added comment
+      console.log('Comment added:', response.data);
       commit('ADD_COMMENT', { postId, comments: response.data });
     },
     async login({ commit }, token) {
@@ -61,10 +65,10 @@ export default createStore({
 
       try {
         const response = await axios.get('/auth');
-        console.log('User data received:', response.data); // Debug: log user data received
+        console.log('User data received:', response.data);
         commit('SET_USER', response.data);
       } catch (error) {
-        console.error('Failed to fetch user data:', error); // Debug: log any errors
+        console.error('Failed to fetch user data:', error);
         commit('SET_USER', null);
       }
     },
@@ -81,19 +85,27 @@ export default createStore({
         console.error('Search failed:', error);
       }
     },
-    async sendFriendRequest(_, friendId) {
+    async sendFriendRequest({ commit }, friendId) {
       try {
         await axios.post('/friends/request', { friendId });
-        // Handle the result if needed
       } catch (error) {
         console.error('Failed to send friend request:', error);
+      }
+    },
+    async fetchUserProfile({ commit }, userId) {
+      try {
+        const response = await axios.get(`/users/${userId}`);
+        commit('SET_PROFILE_USER', response.data);
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
       }
     }
   },
   getters: {
     isAuthenticated: state => !!state.user,
     allPosts: state => state.posts,
-    searchResults: state => state.searchResults
+    searchResults: state => state.searchResults,
+    profileUser: state => state.profileUser
   },
   modules: {}
 });

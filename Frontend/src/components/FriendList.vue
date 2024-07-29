@@ -4,15 +4,16 @@
     <ul>
       <li v-for="friend in searchResults" :key="friend._id">
         <div class="friend-info">
-          <div class="friend-name">{{ friend.name }} {{ friend.lastname }}</div>
-          <div class="friend-email">{{ friend.email }}</div>
+          <router-link :to="'/profile/' + friend._id">
+            <div class="friend-name">{{ friend.name }} {{ friend.lastname }}</div>
+            <div class="friend-email">{{ friend.email }}</div>
+          </router-link>
         </div>
         <button @click="sendFriendRequest(friend._id)">Add Friend</button>
       </li>
     </ul>
   </div>
 </template>
-
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -26,6 +27,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .friend-list {
   padding: 20px;
