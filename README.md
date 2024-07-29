@@ -24,6 +24,12 @@ BeeSocial is a social media platform designed for students and professionals to 
 
 You can see a live demo of BeeSocial [here](#).
 
+# Prerequisites
+
+- Node.js
+- npm (Node Package Manager)
+- MongoDB
+  
 ## Installation
 
 Follow these steps to set up the project on your local machine:
@@ -63,6 +69,8 @@ cd ../frontend
 2. **Install dependencies:
 ```bash
 npm install
+npm install @vue/cli-service@latest
+
 ```
 
 3. ***Run the development server:
@@ -85,3 +93,77 @@ Open your browser and navigate to http://localhost:8080 to see the frontend.
   + Register a new account.
   + Log in with your credentials.
   + Access the feed and other features
+
+Resolving Port Issues
+If you encounter the error EADDRINUSE: address already in use :::3000, it means that port 3000 is already being used by another process. Follow these steps to resolve the issue:
+
+Find and Kill the Process Using Port 3000
+On Windows:
+Open Command Prompt or PowerShell as an administrator.
+
+Run the following command to find the process using port 3000:
+
+sh
+Copy code
+netstat -ano | findstr :3000
+This will display the list of processes using port 3000 along with their PID.
+
+Kill the process using the PID from the previous step:
+
+sh
+Copy code
+taskkill /PID <PID> /F
+Replace <PID> with the actual PID of the process.
+
+On macOS and Linux:
+Open Terminal.
+
+Run the following command to find the process using port 3000:
+
+sh
+Copy code
+lsof -i :3000
+Kill the process using the PID from the previous step:
+
+sh
+Copy code
+kill -9 <PID>
+Replace <PID> with the actual PID of the process.
+
+Change the Port Number
+If you don't want to kill the process or if the port is being used by another application, you can change the port number for your backend server.
+
+Open your server.js file.
+
+Change the port number from 3000 to something else, like 3001.
+
+js
+Copy code
+const PORT = process.env.PORT || 3001;
+Make sure to update any frontend configuration to use the new port if necessary.
+
+Restart your backend server:
+
+sh
+Copy code
+npm start
+Update Environment Variables
+If you use environment variables to set the port, make sure your .env file is updated accordingly:
+
+env
+Copy code
+PORT=3001
+This should resolve the EADDRINUSE error and allow your backend server to start properly.
+
+Features
+User Authentication (Register, Login)
+User Profiles
+Feed with Posts, Likes, and Comments
+Chat
+To-Do List
+Study Tools
+Financial Help
+Friend Requests and Friend List
+Search Functionality
+Contributing
+Feel free to fork this repository and make contributions. Pull requests are welcome!
