@@ -2,7 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,7 +15,7 @@ const db_url = process.env.MONGO_URI;
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db_url)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 

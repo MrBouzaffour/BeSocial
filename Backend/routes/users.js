@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middleware/auth'); // Import the auth middleware
 
 // Register a user
 router.post(
@@ -97,4 +98,5 @@ router.get('/:id', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
 module.exports = router;

@@ -85,7 +85,7 @@ export default createStore({
         console.error('Search failed:', error);
       }
     },
-    async sendFriendRequest({ commit }, friendId) {
+    async sendFriendRequest(_, friendId) {
       try {
         await axios.post('/friends/request', { friendId });
       } catch (error) {
