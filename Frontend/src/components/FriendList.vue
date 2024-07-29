@@ -1,31 +1,40 @@
 <template>
-  <div class="friend-list">
-    <h3>Search Results</h3>
+  <div>
+    <input v-model="query" @input="search" placeholder="Search by name or last name" />
     <ul>
-      <li v-for="friend in searchResults" :key="friend._id">
-        <div class="friend-info">
-          <router-link :to="'/profile/' + friend._id">
-            <div class="friend-name">{{ friend.name }} {{ friend.lastname }}</div>
-            <div class="friend-email">{{ friend.email }}</div>
-          </router-link>
-        </div>
-        <button @click="sendFriendRequest(friend._id)">Add Friend</button>
+      <li v-for="user in users" :key="user._id">
+        <a @click="viewProfile(user._id)">{{ user.name }} {{ user.lastname }}</a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import axios from '../utils/axios';
 
 export default {
-  computed: {
-    ...mapGetters(['searchResults'])
+  data() {
+    return {
+      query: '',
+      users: []
+    };
   },
   methods: {
-    ...mapActions(['sendFriendRequest']),
+    async search() {
+      if (this.query.length > 2) {
+        const response = await axios.get('/users/search', {
+          params: { query: this.query }
+        });
+        this.users = response.data;
+      } else {
+        this.users = [];
+      }
+    },
+    viewProfile(id) {
+      this.$router.push(`/profile/${id}`);
+    }
   }
-}
+};
 </script>
 
 <style scoped>

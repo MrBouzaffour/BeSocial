@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import RegisterView from '../views/RegisterView.vue';
 import FeedView from '../views/FeedView.vue';
+import ProfileView from '../views/ProfileView.vue'; // Ensure this import is correct
 import store from '../store';
 
 const routes = [
@@ -28,6 +29,12 @@ const routes = [
     component: FeedView,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/profile/:id',
+    name: 'UserProfile',
+    component: ProfileView, // Ensure this component is imported correctly
+    meta: { requiresAuth: true }
+  }
 ];
 
 const router = createRouter({

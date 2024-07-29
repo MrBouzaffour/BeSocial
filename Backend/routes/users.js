@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const auth = require('../middleware/auth'); // Import the auth middleware
 
 // Register a user
 router.post(
@@ -85,10 +85,27 @@ router.post(
   }
 );
 
+// Search for users
+router.get('/search', auth, async (req, res) => {
+  try {
+    const { query } = req.query;
+    const users = await User.find({ 
+      $or: [
+        { name: new RegExp(query, 'i') },
+        { lastname: new RegExp(query, 'i') }
+      ]
+    }).select('-password');
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 // Get user by ID
 router.get('/:id', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id).select('-password -email');
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
