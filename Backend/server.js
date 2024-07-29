@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const db_url = process.env.MONGO_URI;
+const db_url = process.env.MONGODB_URI;
 
 // Middleware
 app.use(bodyParser.json());
