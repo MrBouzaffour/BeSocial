@@ -63,6 +63,8 @@ cd ../frontend
 2. **Install dependencies:
 ```bash
 npm install
+npm install @vue/cli-service@latest
+
 ```
 
 3. ***Run the development server:
