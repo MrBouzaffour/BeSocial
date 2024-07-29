@@ -1,4 +1,3 @@
-// src/store/index.js
 import { createStore } from 'vuex';
 import axios from '../utils/axios'; // Import the configured Axios instance
 
@@ -6,6 +5,7 @@ export default createStore({
   state: {
     posts: [],
     user: null,
+    searchResults: []
   },
   mutations: {
     SET_POSTS(state, posts) {
@@ -30,6 +30,9 @@ export default createStore({
       console.log('User set:', user); // Debug: log user being set
       state.user = user;
     },
+    SET_SEARCH_RESULTS(state, results) {
+      state.searchResults = results;
+    }
   },
   actions: {
     async fetchPosts({ commit }) {
@@ -70,10 +73,27 @@ export default createStore({
       delete axios.defaults.headers.common['x-auth-token'];
       commit('SET_USER', null);
     },
+    async searchFriends({ commit }, query) {
+      try {
+        const response = await axios.get(`/friends/search?query=${query}`);
+        commit('SET_SEARCH_RESULTS', response.data);
+      } catch (error) {
+        console.error('Search failed:', error);
+      }
+    },
+    async sendFriendRequest(_, friendId) {
+      try {
+        await axios.post('/friends/request', { friendId });
+        // Handle the result if needed
+      } catch (error) {
+        console.error('Failed to send friend request:', error);
+      }
+    }
   },
   getters: {
     isAuthenticated: state => !!state.user,
     allPosts: state => state.posts,
+    searchResults: state => state.searchResults
   },
-  modules: {},
+  modules: {}
 });

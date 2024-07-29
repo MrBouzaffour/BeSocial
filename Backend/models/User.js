@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -18,6 +19,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  friendRequests: [{
+    type: Schema.Types.ObjectId,
+    ref: 'FriendRequest'
+  }],
   date: {
     type: Date,
     default: Date.now

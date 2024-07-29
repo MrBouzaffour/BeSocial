@@ -19,6 +19,7 @@
         </div>
         <button class="btn" type="submit">Register</button>
       </form>
+      <p v-if="message" class="error-message">{{ message }}</p>
       <div class="switch-auth">
         Already have an account? <router-link to="/login">Login here</router-link>
       </div>
@@ -35,7 +36,8 @@ export default {
       name: '',
       lastname: '',
       email: '',
-      password: ''
+      password: '',
+      message: ''
     };
   },
   methods: {
@@ -51,11 +53,14 @@ export default {
         this.$router.push('/login');
       } catch (error) {
         console.error('Error registering:', error.response ? error.response.data : error.message);
+        this.message = 'User already exist. Please try again.'; 
+
       }
     }
   }
 };
 </script>
+
 
 <style scoped>
 .auth-page {
@@ -63,8 +68,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
-  background: #f2f2f2; /* Light grey */
+  background-color: #f9f9f9;
 }
 
 .auth-container {
@@ -77,40 +81,41 @@ export default {
   text-align: center;
 }
 
-.auth-header {
+.auth-container h2 {
   margin-bottom: 20px;
-}
-
-.auth-header h2 {
   font-size: 24px;
-  color: #5a3e36; /* Dark brown */
-}
-
-.form-group {
-  margin-bottom: 15px;
+  color: #5a3e36;
 }
 
 .auth-container input {
-  width: 100%;
+  width: calc(100% - 20px);
   padding: 10px;
+  margin-bottom: 10px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 
-.auth-container button.btn {
-  width: 100%;
+.auth-container button {
+  width: calc(100% - 20px);
   padding: 10px;
-  background-color: #8bc34a; /* Light green */
-  color: #fff;
+  background-color: #ffda77;
+  color: #5a3e36;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
-.auth-container button.btn:hover {
-  background-color: #7cb342; /* Slightly darker green */
+.auth-container button:hover {
+  background-color: #f6c564;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
 }
 
 .switch-auth {
@@ -119,7 +124,7 @@ export default {
 }
 
 .switch-auth a {
-  color: #8bc34a; /* Light green */
+  color: #ffda77;
   text-decoration: none;
 }
 </style>

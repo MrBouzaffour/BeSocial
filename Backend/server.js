@@ -14,12 +14,13 @@ app.use(bodyParser.json());
 // Connect to MongoDB
 mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+  .catch(err => console.log(err));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
 app.use('/api/posts', require('./routes/posts'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/friends', require('./routes/friends'));
 
 // Serve static files from the frontend build directory
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
