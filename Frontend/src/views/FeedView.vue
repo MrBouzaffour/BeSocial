@@ -1,18 +1,24 @@
 <template>
   <div class="feed-page">
-    <div class="search-bar-wrapper">
-      <SearchBar /> <!-- Include the search bar -->
-    </div>
-    <div class="sidebar">
-      <ul class="nav-list">
-        <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">Feed</li>
-        <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">Chat</li>
-        <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">To-Do List</li>
-        <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">Study Tools</li>
-        <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">Financial Help</li>
-        <li @click="handleLogout">Logout</li>
-      </ul>
-    </div>
+    <header class="navbar">
+      <div class="navbar-brand">My App</div>
+      <div class="navbar-search">
+        <SearchBar /> <!-- Include the search bar -->
+      </div>
+      <nav class="navbar-nav" :class="{ open: navOpen }">
+        <ul class="nav-list">
+          <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">Feed</li>
+          <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">Chat</li>
+          <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">To-Do List</li>
+          <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">Study Tools</li>
+          <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">Financial Help</li>
+          <li @click="handleLogout">Logout</li>
+        </ul>
+      </nav>
+      <div class="navbar-toggle" @click="toggleNav">
+        &#9776;
+      </div>
+    </header>
     <div class="main-content">
       <component :is="activeComponent"></component>
     </div>
@@ -33,6 +39,7 @@ export default {
   data() {
     return {
       activeTab: 'feed',
+      navOpen: false,
     };
   },
   components: {
@@ -41,7 +48,7 @@ export default {
     UserToDoList,
     UserStudyTools,
     UserFinancialHelp,
-    SearchBar
+    SearchBar,
   },
   computed: {
     ...mapGetters(['isAuthenticated']),
@@ -59,17 +66,19 @@ export default {
     ...mapActions(['logout']),
     setActiveTab(tab) {
       this.activeTab = tab;
+      this.navOpen = false; // Close nav on tab select
     },
     handleLogout() {
       this.logout();
       this.$router.push('/login');
     },
+    toggleNav() {
+      this.navOpen = !this.navOpen;
+    },
   },
   created() {
-    console.log("Checking authentication in FeedView");
     if (!this.isAuthenticated) {
-      console.log("Not authenticated, redirecting to login");
-      this.$router.push("/login");
+      this.$router.push('/login');
     }
   },
 };
@@ -78,39 +87,48 @@ export default {
 <style scoped>
 .feed-page {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   background-color: #f2f2f2;
   font-family: 'Arial', sans-serif;
 }
 
-.search-bar-wrapper {
-  width: 100%;
-  background-color: #fff;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffeb99; /* Honey-like background color */
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.sidebar {
-  width: 20%;
-  background-color: #ffeb99; /* Honey-like background color */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+.navbar-brand {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.navbar-search {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.navbar-nav {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 20px;
-  border-right: 2px solid #ffcc66; /* Darker honey border */
 }
 
 .nav-list {
   list-style: none;
+  display: flex;
   padding: 0;
   margin: 0;
-  width: 100%;
 }
 
 .nav-list li {
-  padding: 15px;
-  margin-bottom: 10px;
+  padding: 10px 15px;
+  margin: 0 5px;
   background-color: #ffcc66; /* Darker honey color */
   color: white;
   text-align: center;
@@ -124,9 +142,51 @@ export default {
   background-color: #e6b347; /* Even darker honey color for active and hover */
 }
 
+.navbar-toggle {
+  display: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
 .main-content {
-  width: 80%;
+  flex: 1;
   padding: 20px;
   overflow-y: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-search {
+    display: none;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #ffeb99;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+
+  .navbar-nav.open {
+    display: flex;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-list li {
+    margin: 5px 0;
+  }
 }
 </style>
