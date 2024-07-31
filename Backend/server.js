@@ -1,29 +1,33 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const path = require('path');
+const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
-// Load environment variables from .env file
 dotenv.config();
-
-const app = express();
 const PORT = process.env.PORT || 3000;
-const db_url = process.env.MONGODB_URI;
+const app = express();
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(db_url)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+const uri = process.env.MONGODB_URI;
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.log(err));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/friends', require('./routes/friends'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // Serve static files from the frontend build directory
 app.use(express.static(path.join(__dirname, '../frontend/dist')));

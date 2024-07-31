@@ -1,10 +1,10 @@
-// This file sets up the Vue Router for navigating between different views in your Vue.js application.
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import RegisterView from '../views/RegisterView.vue';
 import FeedView from '../views/FeedView.vue';
-import ProfileView from '../views/ProfileView.vue'; // Ensure this import is correct
+import ProfileView from '../views/ProfileView.vue';
+import FriendRequestList from '../views/FriendRequestList.vue'; // Import the FriendRequestList component
 import store from '../store';
 
 const routes = [
@@ -31,9 +31,15 @@ const routes = [
   },
   {
     path: '/profile/:id',
-    name: 'UserProfile',
-    component: ProfileView, // Ensure this component is imported correctly
+    name: 'Profile',
+    component: ProfileView,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/friend-requests',
+    name: 'FriendRequests',
+    component: FriendRequestList,
+    meta: { requiresAuth: true },
   }
 ];
 

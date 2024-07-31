@@ -102,6 +102,7 @@ router.get('/search', auth, async (req, res) => {
   }
 });
 
+
 // Get user by ID
 router.get('/:id', auth, async (req, res) => {
   try {

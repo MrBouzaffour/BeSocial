@@ -3,7 +3,7 @@
     <header class="navbar">
       <div class="navbar-brand">My App</div>
       <div class="navbar-search">
-        <SearchBar /> <!-- Include the search bar -->
+        <SearchBar />
       </div>
       <nav class="navbar-nav" :class="{ open: navOpen }">
         <ul class="nav-list">
@@ -15,6 +15,7 @@
           <li @click="handleLogout">Logout</li>
         </ul>
       </nav>
+      <NotificationDropdown />
       <div class="navbar-toggle" @click="toggleNav">
         &#9776;
       </div>
@@ -33,6 +34,7 @@ import UserToDoList from '../components/UserToDoList.vue';
 import UserStudyTools from '../components/UserStudyTools.vue';
 import UserFinancialHelp from '../components/UserFinancialHelp.vue';
 import SearchBar from '../components/SearchBar.vue';
+import NotificationDropdown from '../components/NotificationDropdown.vue';
 
 export default {
   name: 'FeedView',
@@ -49,6 +51,7 @@ export default {
     UserStudyTools,
     UserFinancialHelp,
     SearchBar,
+    NotificationDropdown,
   },
   computed: {
     ...mapGetters(['isAuthenticated']),
