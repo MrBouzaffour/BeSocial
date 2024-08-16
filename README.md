@@ -70,6 +70,7 @@ cd ../frontend
 ```bash
 npm install
 npm install @vue/cli-service@latest
+npm install --save vue-toastification@next
 
 ```
 
