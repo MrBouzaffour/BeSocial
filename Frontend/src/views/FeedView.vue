@@ -100,7 +100,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffeb99; /* Honey-like background color */
+  background-color: #ffeb99;
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -132,7 +132,7 @@ export default {
 .nav-list li {
   padding: 10px 15px;
   margin: 0 5px;
-  background-color: #ffcc66; /* Darker honey color */
+  background-color: #ffcc66;
   color: white;
   text-align: center;
   cursor: pointer;
@@ -142,7 +142,7 @@ export default {
 
 .nav-list li.active,
 .nav-list li:hover {
-  background-color: #e6b347; /* Even darker honey color for active and hover */
+  background-color: #e6b347;
 }
 
 .navbar-toggle {
@@ -157,7 +157,6 @@ export default {
   overflow-y: auto;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .navbar-search {
     display: none;
