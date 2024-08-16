@@ -22,23 +22,26 @@ router.post(
     }
 
     const { name, lastname, email, password } = req.body;
-
+    // Checking if the user already exists
     try {
       let user = await User.findOne({ email });
       if (user) {
         return res.status(400).json({ msg: 'User already exists' });
       }
 
-      user = new User({ name, lastname, email, password });
+    user = new User({ name, lastname, email, password });
+      
+    //Crypting the password
+    const salt = await bcrypt.genSalt(10);
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
 
-      await user.save();
+    user.password = await bcrypt.hash(password, salt);
 
-      const payload = { user: { id: user.id } };
-      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-        if (err) throw err;
+    await user.save();
+
+    const payload = { user: { id: user.id } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      if (err) throw err;
         res.json({ token });
       });
     } catch (err) {
