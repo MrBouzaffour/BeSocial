@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import axios from '../utils/axios';
+//import { toast } from 'vue-toastification';
 
 export default createStore({
   state: {
@@ -95,9 +96,19 @@ export default createStore({
       const response = await axios.put(`/posts/unlike/${postId}`);
       commit('REMOVE_LIKE', { postId, likes: response.data });
     },
-    async deletePostAction({ commit }, postId) {
-      await axios.delete(`/posts/${postId}`);
-      commit('DELETE_POST', postId);
+    async deletePost({ commit }, postId) {
+      try {
+        const response = await axios.delete(`/posts/${postId}`);
+        if (response.status === 200 && response.data.msg === 'Post removed') {
+          commit('DELETE_POST', postId);
+          return response.data;  // Ensure you return the response data here
+        } else {
+          throw new Error('Unexpected server response');
+        }
+      } catch (error) {
+        console.error('Delete post failed:', error);
+        throw error;  // Re-throw the error so it can be caught in the component
+      }
     },
     async addComment({ commit }, { postId, text }) {
       const response = await axios.post(`/posts/comment/${postId}`, { text });

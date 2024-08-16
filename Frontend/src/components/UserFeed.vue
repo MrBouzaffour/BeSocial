@@ -67,13 +67,29 @@ export default {
   methods: {
     ...mapActions(['fetchPosts', 'addLike', 'removeLike', 'deletePost', 'addComment', 'deleteComment']),
     async handleDeletePost(postId) {
-      try {
-        await this.deletePost(postId);
+    try {
+      const response = await this.deletePost(postId);
+      console.log('Delete response:', response);  // Log the response for debugging
+      if (response && response.msg === 'Post removed') {
         toast.success('Post deleted successfully');
-      } catch (error) {
-        toast.error('Failed to delete post. Please try again later.');
+      } else {
+        throw new Error('Unexpected response');
       }
-    },
+    } catch (error) {
+      if (error && error.response) {
+        if (error.response.status === 404) {
+          toast.error('Post not found.');
+        } else if (error.response.status === 401) {
+          toast.error('You are not authorized to delete this post.');
+        } else {
+          toast.error('Failed to delete post. Please try again later.');
+        }
+      } else {
+        toast.error('An unexpected error occurred.');
+        console.error('Delete post failed:', error.message || error);
+      }
+    }
+  },
     likePost(postId) {
       this.addLike(postId);
     },

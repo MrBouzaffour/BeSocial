@@ -65,28 +65,28 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 // Delete a post
-  router.delete('/:id', auth, async (req, res) => {
-    try {
-      const post = await Post.findById(req.params.id);
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
 
-      if (!post) {
-        return res.status(404).json({ msg: 'Post not found' });
-      }
-
-      // Check user
-      if (post.user.toString() !== req.user.id) {
-        return res.status(401).json({ msg: 'User not authorized' });
-      }
-
-      await Post.deleteOne({ _id: req.params.id });
-
-      res.json({ msg: 'Post removed' });
-    } catch (err) {
-      console.error('Error occurred while trying to delete post:', err.message);
-      console.error('Error stack trace:', err.stack);
-      res.status(500).send('Server error');
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
     }
-  });
+
+    // Check user
+    if (post.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+
+    await Post.deleteOne({ _id: req.params.id });
+
+    res.json({ msg: 'Post removed' });
+  } catch (err) {
+    console.error('Error occurred while trying to delete post:', err.message);
+    console.error('Error stack trace:', err.stack);
+    res.status(500).send('Server error');
+  }
+});
 
 
 // Like a post
