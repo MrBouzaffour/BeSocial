@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 import axios from '../utils/axios';
-//import { toast } from 'vue-toastification';
+import { toast } from 'vue-toastification';
 
 export default createStore({
   state: {
@@ -34,11 +34,14 @@ export default createStore({
       state.posts = state.posts.filter(post => post._id !== postId);
     },
     ADD_COMMENT(state, { postId, comments }) {
+      console.log('Adding comment to post:', postId);  // Debug line
       const post = state.posts.find(p => p._id === postId);
       if (post) {
         post.comments = comments;
       }
     },
+    
+    
     DELETE_COMMENT(state, { postId, comments }) {
       const post = state.posts.find(p => p._id === postId);
       if (post) {
@@ -111,9 +114,16 @@ export default createStore({
       }
     },
     async addComment({ commit }, { postId, text }) {
-      const response = await axios.post(`/posts/comment/${postId}`, { text });
-      commit('ADD_COMMENT', { postId, comments: response.data });
+      try {
+        const response = await axios.post(`/posts/comment/${postId}`, { text });
+        commit('ADD_COMMENT', { postId, comments: response.data });
+        toast.success('Comment added successfully');
+      } catch (error) {
+        toast.error('Failed to add comment. Please try again later.');
+        console.error('Add comment failed:', error.message || error);
+      }
     },
+    
     async deleteComment({ commit }, { postId, commentId }) {
       const response = await axios.delete(`/posts/comment/${postId}/${commentId}`);
       commit('DELETE_COMMENT', { postId, comments: response.data });

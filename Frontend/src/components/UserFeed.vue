@@ -19,10 +19,11 @@
             <p>{{ comment.text }}</p>
             <button v-if="comment.user === currentUser._id" @click="deleteComment(post._id, comment._id)" class="delete-comment">Delete Comment</button>
           </div>
-          <form @submit.prevent="addComment(post._id)">
+          <form @submit.prevent="submitComment(post._id)">
             <input v-model="commentText[post._id]" placeholder="Add a comment" />
             <button type="submit">Submit</button>
           </form>
+
         </div>
       </div>
     </div>
@@ -99,10 +100,14 @@ export default {
     hasLikedPost(post) {
       return post.likes.some(like => like.user === this.currentUser._id);
     },
-    addComment(postId) {
+    submitComment(postId) {
+    if (this.commentText[postId].trim() !== '') {
       this.addComment({ postId, text: this.commentText[postId] });
-      this.commentText[postId] = '';
-    },
+      this.commentText[postId] = '';  // Clear the comment input after submission
+    } else {
+      toast.error('Comment text cannot be empty.');
+    }
+  },
     deleteComment(postId, commentId) {
       this.deleteComment({ postId, commentId });
     }
