@@ -152,7 +152,7 @@ If you use environment variables to set the port, update your `.env` file accord
 ```bash
 PORT=3001
 ```
-# Contributing
+## Contributing
 Feel free to fork this repository and make contributions. Pull requests are welcome!
 
 ## License
