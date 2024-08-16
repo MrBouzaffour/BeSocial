@@ -80,6 +80,8 @@ You can see a live demo of BeeSocial [here](#).
     npm install @vue/cli-service@latest
     npm install --save vue-toastification@next
     npm install vuetify@next @mdi/font -S
+    npm install vuetify
+
 
     ```
 
