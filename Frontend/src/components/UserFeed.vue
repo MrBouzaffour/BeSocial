@@ -4,7 +4,7 @@
     <div v-if="posts.length > 0">
       <div v-for="post in posts" :key="post._id" class="post">
         <div class="post-header">
-          <h3>{{ post.name }}</h3>
+          <h3>{{ post.name +" "+ post.lastname}}</h3>
         </div>
         <p class="post-text">{{ post.text }}</p>
         <div class="post-actions">

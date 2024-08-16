@@ -13,6 +13,9 @@ const PostSchema = new Schema({
   name: {
     type: String
   },
+  lastname: {
+    type: String
+  },
   likes: [
     {
       user: {
@@ -32,6 +35,9 @@ const PostSchema = new Schema({
         required: true
       },
       name: {
+        type: String
+      },
+      lastname: {
         type: String
       },
       date: {
