@@ -9,6 +9,7 @@ export default createStore({
     profileUser: null,
     notifications: []
   },
+
   mutations: {
     SET_POSTS(state, posts) {
       state.posts = posts;
@@ -22,7 +23,22 @@ export default createStore({
         post.likes = likes;
       }
     },
+    REMOVE_LIKE(state, { postId, likes }) {
+      const post = state.posts.find(p => p._id === postId);
+      if (post) {
+        post.likes = likes;
+      }
+    },
+    DELETE_POST(state, postId) {
+      state.posts = state.posts.filter(post => post._id !== postId);
+    },
     ADD_COMMENT(state, { postId, comments }) {
+      const post = state.posts.find(p => p._id === postId);
+      if (post) {
+        post.comments = comments;
+      }
+    },
+    DELETE_COMMENT(state, { postId, comments }) {
       const post = state.posts.find(p => p._id === postId);
       if (post) {
         post.comments = comments;
@@ -75,9 +91,21 @@ export default createStore({
       const response = await axios.put(`/posts/like/${postId}`);
       commit('ADD_LIKE', { postId, likes: response.data });
     },
+    async removeLike({ commit }, postId) {
+      const response = await axios.put(`/posts/unlike/${postId}`);
+      commit('REMOVE_LIKE', { postId, likes: response.data });
+    },
+    async deletePostAction({ commit }, postId) {
+      await axios.delete(`/posts/${postId}`);
+      commit('DELETE_POST', postId);
+    },
     async addComment({ commit }, { postId, text }) {
       const response = await axios.post(`/posts/comment/${postId}`, { text });
       commit('ADD_COMMENT', { postId, comments: response.data });
+    },
+    async deleteComment({ commit }, { postId, commentId }) {
+      const response = await axios.delete(`/posts/comment/${postId}/${commentId}`);
+      commit('DELETE_COMMENT', { postId, comments: response.data });
     },
     async login({ commit }, token) {
       localStorage.setItem('token', token);

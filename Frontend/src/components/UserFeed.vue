@@ -4,17 +4,20 @@
     <div v-if="posts.length > 0">
       <div v-for="post in posts" :key="post._id" class="post">
         <div class="post-header">
-          <h3>{{ post.name +" "+ post.lastname}}</h3>
+          <h3>{{ post.name }} {{ post.lastname }}</h3>
+          <button v-if="post.user === currentUser._id" @click="handleDeletePost(post._id)" class="delete-post">Delete Post</button>
         </div>
         <p class="post-text">{{ post.text }}</p>
         <div class="post-actions">
-          <button @click="likePost(post._id)">Like ({{ post.likes.length }})</button>
+          <button @click="likePost(post._id)" v-if="!hasLikedPost(post)">Like ({{ post.likes.length }})</button>
+          <button @click="unlikePost(post._id)" v-if="hasLikedPost(post)">Unlike ({{ post.likes.length }})</button>
           <button @click="toggleComments(post._id)">Comments ({{ post.comments.length }})</button>
         </div>
         <div v-if="showComments[post._id]" class="comments">
           <div v-for="comment in post.comments" :key="comment._id" class="comment">
             <h4>{{ comment.name }}</h4>
             <p>{{ comment.text }}</p>
+            <button v-if="comment.user === currentUser._id" @click="deleteComment(post._id, comment._id)" class="delete-comment">Delete Comment</button>
           </div>
           <form @submit.prevent="addComment(post._id)">
             <input v-model="commentText[post._id]" placeholder="Add a comment" />
@@ -33,6 +36,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import UserPostForm from './UserPostForm.vue';
 import { ref } from 'vue';
+import { toast } from 'vue3-toastify';
 
 export default {
   name: 'UserFeed',
@@ -52,19 +56,39 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['allPosts']),
+    ...mapGetters(['allPosts', 'isAuthenticated']),
     posts() {
       return this.allPosts || [];
+    },
+    currentUser() {
+      return this.$store.state.user;
     }
   },
   methods: {
-    ...mapActions(['fetchPosts', 'addLike', 'addComment']),
+    ...mapActions(['fetchPosts', 'addLike', 'removeLike', 'deletePost', 'addComment', 'deleteComment']),
+    async handleDeletePost(postId) {
+      try {
+        await this.deletePost(postId);
+        toast.success('Post deleted successfully');
+      } catch (error) {
+        toast.error('Failed to delete post. Please try again later.');
+      }
+    },
     likePost(postId) {
       this.addLike(postId);
+    },
+    unlikePost(postId) {
+      this.removeLike(postId);
+    },
+    hasLikedPost(post) {
+      return post.likes.some(like => like.user === this.currentUser._id);
     },
     addComment(postId) {
       this.addComment({ postId, text: this.commentText[postId] });
       this.commentText[postId] = '';
+    },
+    deleteComment(postId, commentId) {
+      this.deleteComment({ postId, commentId });
     }
   },
   created() {
@@ -72,6 +96,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 .post {
@@ -85,14 +111,28 @@ export default {
 
 .post-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.bee-icon {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+.delete-post {
+  background-color: #ff6f61;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-comment {
+  background-color: #ff6f61;
+  border: none;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 0.9rem;
 }
 
 .post-header h3 {
