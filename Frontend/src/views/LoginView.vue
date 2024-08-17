@@ -1,18 +1,60 @@
 <template>
-  <div class="auth-page">
-    <div class="auth-container">
-      <h2>Buzz In</h2>
-      <form @submit.prevent="login">
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Password" required />
-        <button type="submit">Buzz In</button>
-      </form>
-      <p v-if="message" class="error-message">{{ message }}</p>
-      <p class="switch-auth">
-        Don't have an account? <router-link to="/register">Sign Up</router-link>
-      </p>
-    </div>
-  </div>
+  <v-container class="auth-page" fill-height fluid>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="8" md="5" lg="4">
+        <v-card class="elevation-12 pa-5" shaped>
+          <v-toolbar color="indigo darken-3" dark flat>
+            <v-toolbar-title class="headline">Buzz In</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form @submit.prevent="login">
+              <v-text-field
+                v-model="email"
+                label="Email Address"
+                prepend-icon="mdi-email"
+                type="email"
+                outlined
+                dense
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="password"
+                label="Password"
+                prepend-icon="mdi-lock"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
+                outlined
+                dense
+                required
+              ></v-text-field>
+              <v-fade-transition>
+                <v-alert
+                  v-if="message"
+                  type="error"
+                  border="left"
+                  colored-border
+                  elevation="2"
+                  color="pink"
+                  dark
+                >
+                  {{ message }}
+                </v-alert>
+              </v-fade-transition>
+              <v-btn color="purple darken-2" block large dark class="mt-5" type="submit">
+                Log In
+              </v-btn>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text color="blue-grey darken-1" @click="$router.push('/register')">
+              Sign Up Instead?
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -26,8 +68,8 @@ export default {
     return {
       email: '',
       password: '',
-      message: ''
-
+      message: '',
+      showPassword: false
     };
   },
   methods: {
@@ -39,14 +81,10 @@ export default {
           password: this.password
         });
         const token = response.data.token;
-        console.log('Token received:', token); // Debug: log token received
         await store.dispatch('login', token);
-        console.log('User after login:', this.$store.state.user); // Debug: log user state
         this.$router.push('/feed');
       } catch (error) {
-        console.error('Login failed:', error);
         this.message = 'Invalid email or password. Please try again.'; 
-
       }
     },
   },
@@ -55,67 +93,14 @@ export default {
 
 <style scoped>
 .auth-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #e8eaf6; /* A light indigo background */
 }
 
-.auth-container {
-  max-width: 400px;
-  width: 100%;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  text-align: center;
+.pa-5 {
+  padding: 32px; /* More spacious padding */
 }
 
-.auth-container h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  color: #5a3e36;
-}
-
-.auth-container input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-.auth-container button {
-  width: calc(100% - 20px);
-  padding: 10px;
-  background-color: #ffda77;
-  color: #5a3e36;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.auth-container button:hover {
-  background-color: #f6c564;
-}
-
-.error-message {
-  color: red;
-  margin-top: 10px;
-}
-
-.switch-auth {
-  margin-top: 20px;
-  color: #555;
-}
-
-.switch-auth a {
-  color: #ffda77;
-  text-decoration: none;
+.headline {
+  font-size: 1.75rem; /* Larger and more prominent title */
 }
 </style>

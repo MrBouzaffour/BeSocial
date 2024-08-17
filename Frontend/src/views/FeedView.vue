@@ -1,60 +1,92 @@
 <template>
-  <div class="feed-page">
-    <header class="navbar">
-      <div class="navbar-brand">My App</div>
-      <div class="navbar-search">
-        <SearchBar />
-      </div>
-      <nav class="navbar-nav" :class="{ open: navOpen }">
-        <ul class="nav-list">
-          <li :class="{ active: activeTab === 'feed' }" @click="setActiveTab('feed')">Feed</li>
-          <li :class="{ active: activeTab === 'chat' }" @click="setActiveTab('chat')">Chat</li>
-          <li :class="{ active: activeTab === 'todo' }" @click="setActiveTab('todo')">To-Do List</li>
-          <li :class="{ active: activeTab === 'study' }" @click="setActiveTab('study')">Study Tools</li>
-          <li :class="{ active: activeTab === 'finance' }" @click="setActiveTab('finance')">Financial Help</li>
-          <li @click="handleLogout">Logout</li>
-        </ul>
-      </nav>
-      <NotificationDropdown />
-      <div class="navbar-toggle" @click="toggleNav">
-        &#9776;
-      </div>
-    </header>
-    <div class="main-content">
-      <component :is="activeComponent"></component>
-    </div>
-  </div>
-</template>
+  <v-app class="feed-page">
+    <!-- Navbar -->
+    <v-app-bar app color="primary" dark flat>
+      <v-app-bar-nav-icon @click="toggleDrawer" />
+      <v-toolbar-title>My App</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="toggleNotifications">
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+      <v-menu v-model="notificationMenu" bottom right offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(notification, index) in notifications" :key="index">
+            <v-list-item-title>{{ notification.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn icon @click="logout">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+    </v-app-bar>
 
+    <!-- Navigation Drawer -->
+    <v-navigation-drawer v-model="drawer" app temporary>
+      <v-list dense>
+        <v-list-item
+          v-for="item in menuItems"
+          :key="item.title"
+          @click="setActiveTab(item.tab)"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <!-- Main Content Area -->
+    <v-main>
+      <v-container class="main-content" fluid>
+        <!-- Dynamic Component based on active tab -->
+        <component :is="activeComponent"></component>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import UserFeed from '../components/UserFeed.vue';
 import UserChat from '../components/UserChat.vue';
 import UserToDoList from '../components/UserToDoList.vue';
 import UserStudyTools from '../components/UserStudyTools.vue';
 import UserFinancialHelp from '../components/UserFinancialHelp.vue';
-import SearchBar from '../components/SearchBar.vue';
-import NotificationDropdown from '../components/NotificationDropdown.vue';
 
 export default {
   name: 'FeedView',
-  data() {
-    return {
-      activeTab: 'feed',
-      navOpen: false,
-    };
-  },
   components: {
     UserFeed,
     UserChat,
     UserToDoList,
     UserStudyTools,
     UserFinancialHelp,
-    SearchBar,
-    NotificationDropdown,
+  },
+  data() {
+    return {
+      activeTab: 'feed',
+      drawer: false,
+      notificationMenu: false,
+      notifications: [
+        { title: 'New Message', subtitle: 'You have a new message' },
+        { title: 'New Comment', subtitle: 'Someone commented on your post' },
+      ],
+      menuItems: [
+        { title: 'Feed', icon: 'mdi-view-dashboard', tab: 'feed' },
+        { title: 'Chat', icon: 'mdi-chat', tab: 'chat' },
+        { title: 'To-Do List', icon: 'mdi-checkbox-marked-circle-outline', tab: 'todo' },
+        { title: 'Study Tools', icon: 'mdi-book-open-variant', tab: 'study' },
+        { title: 'Financial Help', icon: 'mdi-cash', tab: 'finance' },
+      ],
+    };
   },
   computed: {
-    ...mapGetters(['isAuthenticated']),
     activeComponent() {
       return {
         feed: UserFeed,
@@ -67,20 +99,23 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
+    toggleDrawer() {
+      this.drawer = !this.drawer;
+    },
+    toggleNotifications() {
+      this.notificationMenu = !this.notificationMenu;
+    },
     setActiveTab(tab) {
       this.activeTab = tab;
-      this.navOpen = false; // Close nav on tab select
+      this.drawer = false; // Close drawer on tab select
     },
-    handleLogout() {
-      this.logout();
+    logout() {
+      this.$store.dispatch('logout');
       this.$router.push('/login');
-    },
-    toggleNav() {
-      this.navOpen = !this.navOpen;
-    },
+    }
   },
   created() {
-    if (!this.isAuthenticated) {
+    if (!this.$store.getters.isAuthenticated) {
       this.$router.push('/login');
     }
   },
@@ -92,103 +127,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f2f2f2;
-  font-family: 'Arial', sans-serif;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffeb99;
-  padding: 10px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-.navbar-brand {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #333;
-}
-
-.navbar-search {
-  flex: 1;
-  margin: 0 20px;
-}
-
-.navbar-nav {
-  display: flex;
-  align-items: center;
-}
-
-.nav-list {
-  list-style: none;
-  display: flex;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-list li {
-  padding: 10px 15px;
-  margin: 0 5px;
-  background-color: #ffcc66;
-  color: white;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.nav-list li.active,
-.nav-list li:hover {
-  background-color: #e6b347;
-}
-
-.navbar-toggle {
-  display: none;
-  font-size: 1.5em;
-  cursor: pointer;
 }
 
 .main-content {
-  flex: 1;
   padding: 20px;
-  overflow-y: auto;
-}
-
-@media (max-width: 768px) {
-  .navbar-search {
-    display: none;
-  }
-
-  .navbar-toggle {
-    display: block;
-  }
-
-  .navbar-nav {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background-color: #ffeb99;
-    width: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-  }
-
-  .navbar-nav.open {
-    display: flex;
-  }
-
-  .nav-list {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .nav-list li {
-    margin: 5px 0;
-  }
 }
 </style>

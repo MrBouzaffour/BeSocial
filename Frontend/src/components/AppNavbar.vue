@@ -1,42 +1,102 @@
 <template>
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <router-link to="/">Bee</router-link>
-    </div>
-    <div class="navbar-toggle" @click="toggleMenu">
-      <span v-if="!menuOpen">☰</span>
-      <span v-if="menuOpen">✖</span>
-    </div>
-    <div :class="['navbar-links', { 'navbar-links-open': menuOpen }]">
-      <router-link v-if="!$store.getters.isAuthenticated" to="/">Home</router-link>
-      <router-link v-if="!$store.getters.isAuthenticated" to="/login">Login</router-link>
-      <router-link v-if="!$store.getters.isAuthenticated" to="/register">Register</router-link>
-      <router-link v-if="$store.getters.isAuthenticated" to="/feed">Feed</router-link>
-      <button v-if="$store.getters.isAuthenticated" @click="logout">Logout</button>
-    </div>
-  </nav>
+  <v-app-bar app color="primary" dark flat elevate-on-scroll>
+    <v-app-bar-nav-icon @click="toggleDrawer" />
+    <v-toolbar-title>My App</v-toolbar-title>
+    <v-spacer></v-spacer>
+
+    <!-- Notification Button -->
+    <v-btn icon @click="toggleNotifications">
+      <v-icon>mdi-bell</v-icon>
+    </v-btn>
+    
+    <!-- Notifications Menu -->
+    <v-menu v-model="notificationMenu" bottom right offset-y transition="slide-y-transition">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon v-bind="attrs" v-on="on">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+      <v-list dense>
+        <v-subheader>Notifications</v-subheader>
+        <v-divider></v-divider>
+        <v-list-item
+          v-for="(notification, index) in notifications"
+          :key="index"
+          @click="handleNotificationClick(notification)"
+        >
+          <v-list-item-avatar>
+            <v-icon color="blue">mdi-information</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ notification.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon @click.stop="markAsRead(notification)">
+              <v-icon color="grey lighten-1">mdi-check-circle</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-btn text color="primary" @click="viewAllNotifications">View all</v-btn>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <!-- Other AppBar components -->
+    <v-btn icon @click="openUserProfile">
+      <v-icon>mdi-account-circle</v-icon>
+    </v-btn>
+    <v-btn icon @click="openSettings">
+      <v-icon>mdi-settings</v-icon>
+    </v-btn>
+    <v-btn icon @click="handleLogout">
+      <v-icon>mdi-logout</v-icon>
+    </v-btn>
+  </v-app-bar>
 </template>
 
 <script>
 export default {
-  name: 'AppNavbar',
   data() {
     return {
-      menuOpen: false,
+      drawer: false,
+      notificationMenu: false,
+      notifications: [
+        { title: 'New Message', subtitle: 'You have a new message', read: false },
+        { title: 'New Comment', subtitle: 'Someone commented on your post', read: false },
+      ],
     };
   },
   methods: {
-    toggleMenu() {
-      this.menuOpen = !this.menuOpen;
+    toggleDrawer() {
+      this.drawer = !this.drawer;
     },
-    logout() {
-      this.$store.dispatch('logout');
-      this.$router.push('/');
+    toggleNotifications() {
+      this.notificationMenu = !this.notificationMenu;
+    },
+    handleNotificationClick(notification) {
+      // Navigate to notification detail or mark as read
+    },
+    markAsRead(notification) {
+      notification.read = true;
+    },
+    viewAllNotifications() {
+      // Navigate to a page with all notifications
+    },
+    openUserProfile() {
+      // Logic to open user profile
+    },
+    openSettings() {
+      // Logic to open settings
+    },
+    handleLogout() {
+      // Logout logic
     },
   },
 };
 </script>
 
 <style scoped>
-/* Additional scoped styles if needed */
+/* Styling can be adjusted as needed */
 </style>

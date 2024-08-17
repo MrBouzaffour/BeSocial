@@ -40,8 +40,6 @@ export default createStore({
         post.comments = comments;
       }
     },
-    
-    
     DELETE_COMMENT(state, { postId, comments }) {
       const post = state.posts.find(p => p._id === postId);
       if (post) {
