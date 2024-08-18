@@ -95,16 +95,17 @@ router.get('/search', auth, async (req, res) => {
     const { query } = req.query;
     const users = await User.find({
       $or: [
-        { name: new RegExp(query, 'i') },
-        { lastname: new RegExp(query, 'i') }
+        { name: new RegExp(query, 'i') },   // Match 'name' field (case-insensitive)
+        { lastname: new RegExp(query, 'i') } // Match 'lastname' field (case-insensitive)
       ]
-    }).select('-password');
-    res.json(users);
+    }).select('-password');  // Exclude the password field from the results
+    res.json(users);  // Send the matched users as the response
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send('Server error');  // Handle any server errors
   }
 });
+;
 
 
 

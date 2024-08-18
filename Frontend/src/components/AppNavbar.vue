@@ -1,12 +1,16 @@
 <template>
   <v-app-bar app color="primary" dark flat elevate-on-scroll>
     <v-app-bar-nav-icon @click="toggleDrawer" />
+
+    <!-- Application Title -->
     <v-toolbar-title>My App</v-toolbar-title>
 
     <v-spacer></v-spacer>
 
-    <!-- Search Bar -->
-    <SearchBar />
+    <!-- Search Bar added directly in the navigation bar -->
+    <div class="navbar-search-container">
+      <SearchBar />
+    </div>
 
     <v-spacer></v-spacer>
 
@@ -49,7 +53,7 @@
       </v-list>
     </v-menu>
 
-    <!-- Other AppBar components -->
+    <!-- Profile and Settings Buttons -->
     <v-btn icon @click="openUserProfile">
       <v-icon>mdi-account-circle</v-icon>
     </v-btn>
@@ -61,6 +65,7 @@
     </v-btn>
   </v-app-bar>
 </template>
+
 
 <script>
 import SearchBar from '@/components/SearchBar';
@@ -87,7 +92,7 @@ export default {
       this.notificationMenu = !this.notificationMenu;
     },
     handleNotificationClick() {
-      // Handle the notification click action here
+      // Implement the logic for notification click here
     },
     markAsRead(notification) {
       notification.read = true;
@@ -109,8 +114,15 @@ export default {
 };
 </script>
 
+
 <style scoped>
+.navbar-search-container {
+  flex-grow: 1;
+  max-width: 300px; /* Adjust width as needed */
+}
+
 .search-bar {
-  max-width: 300px;
+  width: 100%;
+  margin-right: 16px; /* Space before the notification icon */
 }
 </style>

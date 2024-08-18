@@ -22,12 +22,17 @@
     <!-- Main Content Area -->
     <v-main>
       <v-container class="main-content" fluid>
+        <!-- Search Bar Container -->
+        <div class="search-bar-container">
+          <SearchBar />
+        </div>
         <!-- Dynamic Component based on active tab -->
         <component :is="activeComponent"></component>
       </v-container>
     </v-main>
   </v-app>
 </template>
+
 
 <script>
 import AppNavbar from '@/components/AppNavbar';
@@ -104,5 +109,29 @@ export default {
 
 .main-content {
   padding: 20px;
+  position: relative; /* Make sure the search bar is positioned relative to this container */
+  z-index: 1; /* Ensure that the search bar container is above other elements */
 }
+
+.search-bar-container {
+  position: relative; /* Make sure the dropdown is positioned relative to this container */
+  z-index: 10; /* Make sure the search bar is above the main content */
+}
+
+.search-results {
+  position: absolute; 
+  top: 100%; 
+  left: 0; 
+  width: 100%;
+  background: white;  
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
+  border-radius: 8px;
+  margin-top: 5px; 
+  z-index: 20; /* Ensure this dropdown appears above everything */
+  max-height: 300px;  
+  overflow-y: auto;  
+  padding: 0;
+  list-style-type: none;
+}
+
 </style>

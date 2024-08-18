@@ -1,114 +1,116 @@
 <template>
-  <!-- Container for the search bar and results -->
   <div class="search-bar-container">
-    <!-- Input field bound to `query` with debounced search on input -->
     <input 
       v-model="query" 
       @input="debouncedSearch" 
       placeholder="Search by name or last name" 
-      aria-label="Search users by name or last name"
+      class="search-input" 
     />
-
-    <!-- Conditional rendering: If users array has items, display them -->
-    <ul v-if="users.length" class="search-results">
-      <!-- Loop through `users` array and display each user's name and last name -->
-      <li v-for="user in users" :key="user._id">
-        <a @click="viewProfile(user._id)">{{ user.name }} {{ user.lastname }}</a>
+    <ul v-if="filteredUsers.length" class="search-results">
+      <li v-for="user in filteredUsers" :key="user._id" @click="viewProfile(user._id)" class="search-result-item">
+        <div class="result-content">
+          <p class="result-name">{{ user.name }} {{ user.lastname }}</p>
+        </div>
       </li>
     </ul>
-    <!-- Optional message when no users are found -->
-    <p v-else>No users found.</p>
   </div>
 </template>
 
 <script>
-import axios from '@/utils/axios'; // Axios instance for making API requests
-import _ from 'lodash'; // Lodash library for utility functions like debouncing
+import axios from '../utils/axios';
+import { debounce } from 'lodash';
 
 export default {
   data() {
     return {
-      query: '', // Search query entered by the user
-      users: []  // Array to hold the search results (users)
+      query: '',
+      users: [],
     };
   },
+  computed: {
+    filteredUsers() {
+      return this.users.filter(user => 
+        user.name.toLowerCase().includes(this.query.toLowerCase()) ||
+        user.lastname.toLowerCase().includes(this.query.toLowerCase())
+      );
+    }
+  },
   created() {
-    // Creating a debounced version of the search method to delay execution 
-    // until the user stops typing for 300ms, improving performance.
-    this.debouncedSearch = _.debounce(this.search, 300);
+    this.debouncedSearch = debounce(this.search, 300);
   },
   methods: {
-    // Method to perform the search when the query length exceeds 2 characters
     async search() {
       if (this.query.length > 2) {
         try {
-          // API request to search for users based on the query
-          const response = await axios.get('/api/users/search', {
+          const response = await axios.get('/users/search', {
             params: { query: this.query }
           });
-          console.log('API Response:', response.data); // Debug: Log API response
-          this.users = response.data; // Update `users` array with the search results
-          console.log('Updated Users:', this.users); // Debug: Log the updated users array
+          this.users = response.data;
         } catch (error) {
-          console.error('Search error:', error); // Log any errors encountered during the request
-          this.users = []; // Clear `users` array if an error occurs
+          console.error('Error fetching users:', error);
+          this.users = [];
         }
       } else {
-        // Clear `users` array if the query is too short
         this.users = [];
       }
     },
-    // Method to navigate to a user's profile when their name is clicked
     viewProfile(id) {
-      this.$router.push(`/profile/${id}`); // Navigate to the profile page of the selected user
+      this.$router.push(`/profile/${id}`);
     }
   }
 };
 </script>
 
 <style scoped>
-/* Styling for the search bar container */
 .search-bar-container {
   position: relative;
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
+  z-index: 1000; /* Ensures the search bar is above other elements */
 }
 
-/* Styling for the input field */
-.search-bar-container input {
+.search-input {
   width: 100%;
-  padding: 10px;
+  padding: 12px 16px;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  background-color: white;  
+  color: #333;  
+  border: 1px solid #ccc;  
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;  
 }
 
-/* Styling for the search results dropdown */
 .search-results {
   position: absolute;
+  top: 100%; 
+  left: 0; 
   width: 100%;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  margin-top: 5px;
-  z-index: 10;
+  background: white;  
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
+  border-radius: 8px;
+  margin-top: 5px; 
+  z-index: 1100; /* Ensure this dropdown appears above everything */
+  max-height: 300px;  
+  overflow-y: auto;  
+  padding: 0;
+  list-style-type: none;
 }
 
-/* Styling for each user item in the search results */
-.search-results li {
-  padding: 10px;
+.search-result-item {
+  padding: 12px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  transition: background 0.3s ease;  
+  border-bottom: 1px solid #eee;  
+  display: flex;
+  align-items: center;
 }
 
-/* Remove border on the last item */
-.search-results li:last-child {
-  border-bottom: none;
+.result-name {
+  margin: 0;
+  font-size: 16px;
+  color: #333;  
 }
 
-/* Hover effect for search results */
-.search-results li:hover {
-  background: #f2f2f2;
+.search-result-item:hover {
+  background: #f5f5f5;  
 }
 </style>
