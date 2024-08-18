@@ -81,9 +81,8 @@ You can see a live demo of BeeSocial [here](#).
     npm install --save vue-toastification@next
     npm install vuetify@next
     npm install sass sass-loader@10 fibers
-
-
-
+    npm install @mdi/font
+    npm install lodash
     ```
 
 3. **Run the development server:**
