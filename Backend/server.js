@@ -22,7 +22,7 @@ mongoose.connect(uri, {
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
 
-// Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));

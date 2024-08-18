@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import axios from '../utils/axios'; // Make sure the axios instance is correctly configured
+import axios from '../utils/axios'; 
 
 export default {
   data() {
@@ -109,14 +109,14 @@ export default {
 
 <style scoped>
 .auth-page {
-  background-color: #e8eaf6; /* A light indigo background */
+  background-color: #e8eaf6;
 }
 
 .pa-5 {
-  padding: 32px; /* More spacious padding */
+  padding: 32px; 
 }
 
 .headline {
-  font-size: 1.75rem; /* Larger and more prominent title */
+  font-size: 1.75rem;
 }
 </style>

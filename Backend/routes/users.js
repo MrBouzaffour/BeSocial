@@ -93,7 +93,7 @@ router.post(
 router.get('/search', auth, async (req, res) => {
   try {
     const { query } = req.query;
-    const users = await User.find({ 
+    const users = await User.find({
       $or: [
         { name: new RegExp(query, 'i') },
         { lastname: new RegExp(query, 'i') }
@@ -105,6 +105,8 @@ router.get('/search', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+
 
 
 // Get user by ID

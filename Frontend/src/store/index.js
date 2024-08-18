@@ -50,6 +50,7 @@ export default createStore({
       state.user = user;
     },
     SET_SEARCH_RESULTS(state, results) {
+      console.log("Updated Search Results:", results); // Debug log to trace what is being set
       state.searchResults = results;
     },
     SET_PROFILE_USER(state, user) {
@@ -143,11 +144,13 @@ export default createStore({
       commit('SET_USER', null);
     },
     async searchFriends({ commit }, query) {
+      console.log('Sending search query:', query);  // Confirm query being sent
       try {
-        const response = await axios.get(`/friends/search?query=${query}`);
+        const response = await axios.get(`/users/search`, { params: { query } });
+        console.log('Search results received:', response.data);  // Log the response data
         commit('SET_SEARCH_RESULTS', response.data);
       } catch (error) {
-        console.error('Search failed:', error);
+        console.error('Error during search:', error);
       }
     },
     async sendFriendRequest({ commit }, friendId) {

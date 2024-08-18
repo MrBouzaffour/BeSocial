@@ -2,13 +2,19 @@
   <v-app-bar app color="primary" dark flat elevate-on-scroll>
     <v-app-bar-nav-icon @click="toggleDrawer" />
     <v-toolbar-title>My App</v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+    <!-- Search Bar -->
+    <SearchBar />
+
     <v-spacer></v-spacer>
 
     <!-- Notification Button -->
     <v-btn icon @click="toggleNotifications">
       <v-icon>mdi-bell</v-icon>
     </v-btn>
-    
+
     <!-- Notifications Menu -->
     <v-menu v-model="notificationMenu" bottom right offset-y transition="slide-y-transition">
       <template v-slot:activator="{ on, attrs }">
@@ -22,7 +28,7 @@
         <v-list-item
           v-for="(notification, index) in notifications"
           :key="index"
-          @click="handleNotificationClick(notification)"
+          @click="handleNotificationClick"
         >
           <v-list-item-avatar>
             <v-icon color="blue">mdi-information</v-icon>
@@ -57,7 +63,12 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar';
+
 export default {
+  components: {
+    SearchBar,
+  },
   data() {
     return {
       drawer: false,
@@ -75,8 +86,8 @@ export default {
     toggleNotifications() {
       this.notificationMenu = !this.notificationMenu;
     },
-    handleNotificationClick(notification) {
-      // Navigate to notification detail or mark as read
+    handleNotificationClick() {
+      // Handle the notification click action here
     },
     markAsRead(notification) {
       notification.read = true;
@@ -91,12 +102,15 @@ export default {
       // Logic to open settings
     },
     handleLogout() {
-      // Logout logic
+      this.$store.dispatch('logout');
+      this.$router.push('/login');
     },
   },
 };
 </script>
 
 <style scoped>
-/* Styling can be adjusted as needed */
+.search-bar {
+  max-width: 300px;
+}
 </style>
