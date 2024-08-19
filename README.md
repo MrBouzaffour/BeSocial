@@ -1,6 +1,9 @@
-# BeeSocial
 
-BeeSocial is a social media platform designed for students and professionals to connect, collaborate, and stay organized. It offers features like real-time messaging, a to-do list, study tools, and financial help, all wrapped in a user-friendly interface with a pleasant bee-themed design.
+# SimpleSocial
+
+**Note: This project is currently under development. Some features may be incomplete or subject to change.**
+
+SimpleSocial is a robust social media platform, aiming to enhance communication, organization, and collaboration.
 
 ## Table of Contents
 
@@ -19,19 +22,18 @@ BeeSocial is a social media platform designed for students and professionals to 
 
 ## Features
 
-- **Feed**: Stay updated with your friends' latest posts and activities.
-- **Live Messages**: Chat with your friends in real-time.
-- **To-Do List**: Keep track of your tasks and stay organized.
-- **Study Tools**: Access various tools to help you with your studies.
-- **Financial Help**: Get assistance with managing your finances effectively.
-- **User Authentication**: Register and log in with secure authentication.
-- **User Profiles**: Create and manage personal profiles.
-- **Friend Requests and Friend List**: Connect with friends and manage your social network.
-- **Search Functionality**: Find users and content easily.
+- **Feed**: Stay updated with posts and activities.
+- **Live Messages**: Engage in real-time chats.
+- **To-Do List**: Organize and manage tasks efficiently.
+- **Study Tools**: Access tools for academic assistance.
+- **User Authentication**: Secure and reliable login system.
+- **User Profiles**: Customize and manage personal profiles.
+- **Friend Requests and Friend List**: Build and maintain connections.
+- **Search Functionality**: Easily locate users and content.
 
 ## Demo
 
-You can see a live demo of BeeSocial [here](#).
+A live demo of SimpleSocial is available [here](#).
 
 ## Prerequisites
 
@@ -45,8 +47,8 @@ You can see a live demo of BeeSocial [here](#).
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/beesocial.git
-    cd beesocial/backend
+    git clone https://github.com/your-username/simplesocial.git
+    cd simplesocial/backend
     ```
 
 2. **Install dependencies:**
@@ -55,8 +57,7 @@ You can see a live demo of BeeSocial [here](#).
     ```
 
 3. **Set up environment variables:**
-    Create a `.env` file in the backend directory with the following content:
-    ```bash
+    ```plaintext
     PORT=3000
     MONGODB_URI=your_mongodb_connection_string
     JWT_SECRET=your_jwt_secret
@@ -77,12 +78,6 @@ You can see a live demo of BeeSocial [here](#).
 2. **Install dependencies:**
     ```bash
     npm install
-    npm install @vue/cli-service@latest
-    npm install --save vue-toastification@next
-    npm install vuetify@next
-    npm install sass sass-loader@10 fibers
-    npm install @mdi/font
-    npm install lodash
     ```
 
 3. **Run the development server:**
@@ -99,28 +94,28 @@ You can see a live demo of BeeSocial [here](#).
 
 ### Accessing the Application
 
-Open your browser and navigate to `http://localhost:8080` to see the frontend.
+Navigate to `http://localhost:8080` in your browser to access the frontend.
 
 ### Registering and Logging In
 
-- Register a new account.
-- Log in with your credentials.
-- Access the feed and other features.
+- Sign up for a new account.
+- Log in using your credentials.
+- Explore the feed and utilize other features.
 
 ## Resolving Port Issues
 
-If you encounter the error `EADDRINUSE: address already in use :::3000`, follow these steps:
+If you face the `EADDRINUSE: address already in use :::3000` error, follow the steps below to resolve it.
 
 ### Find and Kill the Process Using Port 3000
 
 #### On Windows:
 
 1. Open Command Prompt or PowerShell as an administrator.
-2. Run the following command to find the process using port 3000:
+2. Run the following command:
     ```bash
     netstat -ano | findstr :3000
     ```
-3. Kill the process using the PID from the previous step:
+3. Terminate the process using the PID from the output:
     ```bash
     taskkill /PID <PID> /F
     ```
@@ -128,36 +123,33 @@ If you encounter the error `EADDRINUSE: address already in use :::3000`, follow 
 #### On macOS and Linux:
 
 1. Open Terminal.
-2. Run the following command to find the process using port 3000:
+2. Execute:
     ```bash
     lsof -i :3000
     ```
-3. Kill the process using the PID from the previous step:
+3. Kill the process using:
     ```bash
     kill -9 <PID>
     ```
 
 ### Change the Port Number
 
-1. Open your `server.js` file.
-2. Change the port number from 3000 to something else, like 3001:
-    ```js
-    const PORT = process.env.PORT || 3001;
-    ```
-3. Update any frontend configuration to use the new port if necessary.
-4. Restart your backend server:
-    ```bash
-    npm start
-    ```
+Modify the `server.js` file to use a different port, such as 3001, and adjust any necessary frontend configurations. Restart your backend server with:
+```bash
+npm start
+```
 
 ### Update Environment Variables
 
-If you use environment variables to set the port, update your `.env` file accordingly:
+Adjust your `.env` file if you're using environment variables to set the port:
 ```bash
 PORT=3001
 ```
+
 ## Contributing
-Feel free to fork this repository and make contributions. Pull requests are welcome!
+
+Contributions are welcome! Feel free to fork this repository and submit pull requests.
 
 ## License
-Include information about the project's license here.
+
+Include your project's license information here.
