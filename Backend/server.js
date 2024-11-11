@@ -1,12 +1,13 @@
 const express = require('express');
+
 const cors = require('cors');
 const morgan = require('morgan');
-/*
+//const eventRoutes = require('./routes/eventRoutes');
+//const calendarRoutes = require('./routes/calendarRoutes');
+
 const userRoutes = require('./routes/userRoutes');
-const eventRoutes = require('./routes/eventRoutes');
 const friendRoutes = require('./routes/friendRoutes');
-const calendarRoutes = require('./routes/calendarRoutes');
-*/
+
 const { handleError } = require('./utils/errorHandler');
 const authMiddleware = require('./middlewares/authMiddleware');
 const app = express();
@@ -32,18 +33,18 @@ app.use((err, req, res, next) => {
     }
     next();
 });
-/*
+
 // login and register doesn't require authMiddleware
 app.use('/api/users', userRoutes);
 
-// Protected routes: Apply authMiddleware
-app.use('/api/calendars', authMiddleware, calendarRoutes);
-app.use('/api/events', authMiddleware, eventRoutes);
 app.use('/api/friends', authMiddleware, friendRoutes);
+//app.use('/api/calendars', authMiddleware, calendarRoutes);
+//app.use('/api/events', authMiddleware, eventRoutes);
+
 
 // Error Handling Middleware 
 app.use(handleError);
-*/
+
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
